@@ -1,0 +1,12 @@
+# Nota: C-Order, 1 refers to the Y axis, 2 to the X axis 
+# Calibration done at Fri Apr 23 06:47:54 2021
+poni_version: 2
+Detector: Detector
+Detector_config: {"pixel1": 0.00017199999999999998, "pixel2": 0.00017199999999999998, "max_shape": null}
+Distance: 0.9072351934757826
+Poni1: 0.17096194566742506
+Poni2: 0.12849976193501494
+Rot1: -0.0014365430665413445
+Rot2: 0.0008028710729577341
+Rot3: -3.79884323493105e-09
+Wavelength: 1.2422999999999999e-11

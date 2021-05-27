@@ -1,0 +1,12 @@
+.DS_Store
+._.DS_Store
+._*
+.DS*
+__pycache__/
+.ipynb_checkpoints/
+*.fuse
+/.idea
+/venv
+/example-data/Diamond_2021/
+/example-data/Diamond_2017/
+/instructions/
