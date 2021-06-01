@@ -5,7 +5,7 @@ import os
 drive = "D:/Chris Daniel/"
 
 # properties of the data files.
-datafile_directory = drive + 'Continuous-Peak-Fit-Analysis/example-data/Diamond_2021'
+datafile_directory = drive + 'continuous-peak-fit-analysis/example-data/Diamond_2021'
 datafile_Basename  = "103817_summed_"
 datafile_Ending    = ".tiff"
 datafile_StartNum  = 1
@@ -15,7 +15,7 @@ datafile_NumDigit  = 5
 # calibration and masking.
 Calib_type   = "Dioptas"
 Calib_detector = 'unknown'
-Calib_data     = drive + 'Continuous-Peak-Fit-Analysis/example-calibration/Diamond_2021/103852-pilatus2M-files/00001.cbf'
+Calib_data     = drive + 'continuous-peak-fit-analysis/example-calibration/Diamond_2021/103852-pilatus2M-files/00001.cbf'
 Calib_param    = 'example-calibration/Diamond_2021/103852-pilatus2M-files/calibration_103852.poni'
 Calib_mask     = 'example-calibration/Diamond_2021/103852-pilatus2M-files/mask_103852.mask'
 Calib_pixels = 172
