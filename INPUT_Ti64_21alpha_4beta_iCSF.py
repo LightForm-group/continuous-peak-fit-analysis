@@ -16,8 +16,9 @@ datafile_NumDigit  = 3
 Calib_type   = "Dioptas"
 Calib_detector = 'unknown'
 Calib_data     = drive + 'SXRD_analysis/diamond_2021/103852-calibration/00001.cbf'
-Calib_param    = drive + 'SXRD_analysis/diamond_2021/103852-calibration/calibration_103852.poni'
-Calib_mask     = drive + 'SXRD_analysis/diamond_2021/103852-calibration/mask_103852.mask'
+print(Calib_data)
+Calib_param    = 'calibration_103852.poni'
+Calib_mask     = 'mask_103852.mask'
 Calib_pixels = 172
 
 
