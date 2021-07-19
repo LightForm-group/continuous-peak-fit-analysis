@@ -1,0 +1,6 @@
+jupyter
+matplotlib
+lmfit
+h5py
+pillow
+pyFAI

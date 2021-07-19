@@ -8,7 +8,7 @@ drive = "/mnt/iusers01/jf01/mbcx9cd4/rds_lightform/"
 datafile_directory = drive + 'SXRD_raw_data/diamond_2021/rawdata/103844-pilatus2M-files'
 datafile_Basename  = "00"
 datafile_Ending    = ".cbf"
-datafile_StartNum  = 1
+datafile_StartNum  = 2
 datafile_EndNum    = 387
 datafile_NumDigit  = 3
 
@@ -16,9 +16,8 @@ datafile_NumDigit  = 3
 Calib_type   = "Dioptas"
 Calib_detector = 'unknown'
 Calib_data     = drive + 'SXRD_analysis/diamond_2021/103852-calibration/00001.cbf'
-print(Calib_data)
-Calib_param    = 'calibration_103852.poni'
-Calib_mask     = 'mask_103852.mask'
+Calib_param    = drive + 'SXRD_analysis/diamond_2021/103852-calibration/calibration_103852.poni'
+Calib_mask     = drive + 'SXRD_analysis/diamond_2021/103852-calibration/mask_103852.mask'
 Calib_pixels = 172
 
 
