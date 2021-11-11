@@ -1,27 +1,32 @@
 %% User Inputs...
 
 % specify the experiment number
-experiment_number = 103845
+experiment_number = 065
 
 % specify the test numbers
-test_number = [2:42 45:85 88:128 131:171 174:214 217:257 260:300 303:343 346:386]
+test_number = [3100:3400]
 
 % specify the phase
-phase = 'alpha'
+phase = 'beta'
 
 % specify the plotting convention
 setMTEXpref('xAxisDirection','north');
 setMTEXpref('zAxisDirection','intoPlane');
 
 % set the pole figure maxima
-pf_max = 5
-contour_step = 0.5
+pf_max = 3
+contour_step = 0.25
 
 % specify the ODF resolution
 odf_resolution = 10*degree
 
 % set the ODF maxima
-odf_max = 8
+odf_max = 5
+
+% specify rotation
+euler1 = 90
+euler2 = 0
+euler3 = 0
 
 %% Specify Crystal Symmetry
 
@@ -42,16 +47,16 @@ end
 %% Specify Output
 
 % define experiment number
-experiment_format_spec = '%06.f';
+experiment_format_spec = '%03.f';
 experiment_number_string = num2str(experiment_number, experiment_format_spec)
 
 % define output path
-output_path = strcat('/mnt/eps01-rds/Fonseca-Lightform/mbcx9cd4/SXRD_results/diamond_2021/', experiment_number_string,...
-    '/texture-cpf-stage-scan/', experiment_number_string, '-raw-intensities-10deg/')
+output_path = strcat('/mnt/eps01-rds/Fonseca-Lightform/mbcx9cd4/SXRD_results/diamond_2017/', experiment_number_string,...
+    '/texture-cpf/', experiment_number_string, '-raw-intensities-10deg/beta/')
 
 % open file to save the texture values
 output_text_file = fopen(fullfile(output_path, strcat(experiment_number_string,'_texture_strength.txt')),'w')
-fprintf(output_text_file, 'Test Number \t Texture Index \t ODF Max \t phi1 Angle of ODF Max \t PHI Angle of ODF Max \t phi2 Angle of ODF Max \t {0002} PF Max \t {10-10} PF Max \t {11-20} PF Max \t Basal TD Volume Fraction \t Basal RD Volume Fraction \n');
+fprintf(output_text_file, 'Test Number \t Texture Index \t ODF Max \t phi1 Angle of ODF Max \t PHI Angle of ODF Max \t phi2 Angle of ODF Max \t {001} PF Max \t {110} PF Max \t {111} PF Max \n');
 
 %% Analyse Intensity Data
 
@@ -62,58 +67,26 @@ for i = 1:length(test_number)
     test_number_string = num2str(test_number(i),test_format_spec)
     
     % path to files
-    pname = strcat('/mnt/eps01-rds/Fonseca-Lightform/mbcx9cd4/SXRD_analysis/diamond_2021/', experiment_number_string,...
-        '/texture-cpf-stage-scan/', experiment_number_string, '-raw-intensities/', experiment_number_string, '_', test_number_string, '_peak_intensity_');
+    pname = strcat('/mnt/eps01-rds/Fonseca-Lightform/mbcx9cd4/SXRD_analysis/diamond_2017/', experiment_number_string,...
+        '/texture-cpf/', experiment_number_string, '-raw-intensities/', experiment_number_string, '_', test_number_string, '_peak_intensity_');
     
     % which files to be imported
     fname = { ...
-      [pname '0002.txt'],...
-      [pname '0004.txt'],...
-      [pname '10-10.txt'],...
-      [pname '10-11.txt'],...
-      [pname '10-12.txt'],...
-      [pname '10-13.txt'],...
-      [pname '10-14.txt'],...
-      [pname '10-15.txt'],...
-      [pname '11-20.txt'],...
-      [pname '11-22.txt'],...
-      [pname '11-24.txt'],...
-      [pname '20-20.txt'],...
-      [pname '20-21.txt'],...
-      [pname '20-22.txt'],...
-      [pname '20-23.txt'],...
-      [pname '20-24.txt'],...
-      [pname '21-30.txt'],...
-      [pname '21-31.txt'],...
-      [pname '21-32.txt'],...
-      [pname '30-30.txt'],...
-      [pname '30-31.txt'],...
+      [pname '110.txt'],...
+      [pname '200.txt'],...
+      [pname '211.txt'],...
+      [pname '220.txt'],...
+      [pname '310.txt'],...
       };
 
     % Specify Miller Indices
     
     h = { ...
-      Miller(0,0,0,2,CS),...
-      Miller(0,0,0,4,CS),...
-      Miller(1, 0,-1, 0,CS),...
-      Miller(1, 0,-1, 1,CS),...
-      Miller(1, 0,-1, 2,CS),...
-      Miller(1, 0,-1, 3,CS),...
-      Miller(1, 0,-1, 4,CS),...
-      Miller(1, 0,-1, 5,CS),...
-      Miller(1, 1,-2, 0,CS),...
-      Miller(1, 1,-2, 2,CS),...
-      Miller(1, 1,-2, 4,CS),...
-      Miller(2, 0,-2, 0,CS),...
-      Miller(2, 0,-2, 1,CS),...
-      Miller(2, 0,-2, 2,CS),...
-      Miller(2, 0,-2, 3,CS),...
-      Miller(2, 0,-2, 4,CS),...
-      Miller(2, 1,-3, 0,CS),...
-      Miller(2, 1,-3, 1,CS),...
-      Miller(2, 1,-3, 2,CS),...
-      Miller(3, 0,-3, 0,CS),...
-      Miller(3, 0,-3, 1,CS),...
+      Miller(1,1,0,CS),...
+      Miller(2,0,0,CS),...
+      Miller(2,1,1,CS),...
+      Miller(2,2,0,CS),...
+      Miller(3,1,0,CS),...
       };
   
     % specify the number of indices
@@ -152,14 +125,19 @@ for i = 1:length(test_number)
 
     odf = calcODF(pf, 'RESOLUTION', odf_resolution);
 
+    % Rotate the ODF
+    
+    rot = rotation('Euler', euler1*degree, euler2*degree, euler3*degree);
+    odf = rotate(odf,rot);
+    
     % Plot the Pole Figures with Contouring 
 
     % plot the pole figure
     output_filename = strcat(output_path,experiment_number_string,'_PF_',test_number_string)
     [maxval] = pole_figure_plot(phase, odf, CS, contour_step, pf_max, output_filename);
-    PF_basal_max(i) = maxval(1);
-    PF_prismatic1_max(i) = maxval(2);
-    PF_prismatic2_max(i) = maxval(3);
+    PF_001_max(i) = maxval(1);
+    PF_110_max(i) = maxval(2);
+    PF_111_max(i) = maxval(3);
     
     % Analyse the ODF
     
@@ -193,7 +171,7 @@ for i = 1:length(test_number)
     
     % write the texture values to file
     %fprintf(output_text_file, '%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\n', test_number(i), TEXTURE_INDEX(i), odf_strength_max(i), rad2deg(phi1(i)), rad2deg(PHI(i)), rad2deg(phi2(i)), PF_basal_max(i), PF_prismatic1_max(i), PF_prismatic2_max(i), basal_TD_volume_fraction(i), basal_RD_volume_fraction(i))
-    fprintf(output_text_file, '%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\n', test_number(i), TEXTURE_INDEX(i), odf_strength_max(i), rad2deg(phi1(i)), rad2deg(PHI(i)), rad2deg(phi2(i)), PF_basal_max(i), PF_prismatic1_max(i), PF_prismatic2_max(i))
+    fprintf(output_text_file, '%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\n', test_number(i), TEXTURE_INDEX(i), odf_strength_max(i), rad2deg(phi1(i)), rad2deg(PHI(i)), rad2deg(phi2(i)), PF_001_max(i), PF_110_max(i), PF_111_max(i))
     
 end
 
@@ -250,29 +228,29 @@ hold off
 legend('Phi2 Angle')
 saveas (phi2_figure, strcat(output_path,experiment_number_string,'_phi2_line_plot.png'));
 
-PF_basal_figure = figure();
+PF_001_figure = figure();
 hold on
-plot(i,PF_basal_max,'Color',[1,0,0],'lineWidth',2) % red;
+plot(i,PF_001_max,'Color',[1,0,0],'lineWidth',2) % red;
 xlabel('Slice Number')
-ylabel('{0002} Pole Figure Max.')
+ylabel('{001} Pole Figure Max.')
 hold off
-legend('{0002} Pole Figure Max.')
-saveas (PF_basal_figure, strcat(output_path,experiment_number_string,'_PF_basal_line_plot.png'));
+legend('{001} Pole Figure Max.')
+saveas (PF_001_figure, strcat(output_path,experiment_number_string,'_PF_001_line_plot.png'));
 
-PF_prismatic1_figure = figure();
+PF_110_figure = figure();
 hold on
-plot(i,PF_prismatic1_max,'Color',[1,0,0],'lineWidth',2) % red;
+plot(i,PF_110_max,'Color',[1,0,0],'lineWidth',2) % red;
 xlabel('Slice Number')
-ylabel('{10-10} Pole Figure Max.')
+ylabel('{110} Pole Figure Max.')
 hold off
-legend('{10-10} Pole Figure Max.')
-saveas (PF_prismatic1_figure, strcat(output_path,experiment_number_string,'_PF_prismatic1_line_plot.png'));
+legend('{110} Pole Figure Max.')
+saveas (PF_110_figure, strcat(output_path,experiment_number_string,'_PF_110_line_plot.png'));
 
-PF_prismatic2_figure = figure();
+PF_111_figure = figure();
 hold on
-plot(i,PF_prismatic2_max,'Color',[1,0,0],'lineWidth',2) % red;
+plot(i,PF_111_max,'Color',[1,0,0],'lineWidth',2) % red;
 xlabel('Slice Number')
-ylabel('{11-20} Pole Figure Max.')
+ylabel('{111} Pole Figure Max.')
 hold off
-legend('{11-20} Pole Figure Max.')
-saveas (PF_prismatic2_figure, strcat(output_path,experiment_number_string,'_PF_prismatic2_line_plot.png'));
+legend('{111} Pole Figure Max.')
+saveas (PF_111_figure, strcat(output_path,experiment_number_string,'_PF_111_line_plot.png'));

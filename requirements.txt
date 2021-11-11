@@ -4,3 +4,5 @@ lmfit
 h5py
 pillow
 pyFAI
+pyyaml
+tqdm
