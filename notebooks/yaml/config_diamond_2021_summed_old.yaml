@@ -8,7 +8,7 @@ file_paths:
     input_fit_path: ../../../SXRD_analysis/diamond_2021/{experiment_number:05d}/texture-cpf/{experiment_number:05d}-cpf-output/{experiment_number:05d}_summed{image_number:01d}.fit
 # input path of the results .fit file, excluding the experiment number and image number
     
-    output_text_path: ../../../SXRD_analysis/diamond_2021/{experiment_number:05d}/texture-cpf/{experiment_number:05d}-{intensity_type}-intensities/{experiment_number:05d}_summed{image_number:01d}_peak_intensity_{label}.txt
+    output_text_path: ../../../SXRD_analysis/diamond_2021/{experiment_number:05d}/texture-cpf/{experiment_number:05d}-{intensity_type}-intensities/{experiment_number:05d}_{image_number:05d}_peak_intensity_{label}.txt
 # output path for the texture text file, excluding the experiment number, intensity type, image number and lattice plane peak label.
     
 user_inputs: 

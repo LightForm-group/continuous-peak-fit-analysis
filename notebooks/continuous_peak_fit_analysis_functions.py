@@ -120,11 +120,7 @@ def extract_combine_intensity_input(config_path: str):
     intensity_type = config_combine["user_inputs"]["intensity_type"]
     print("The intensity type is:", intensity_type, sep='\n', end='\n\n')
 
-    experiment_start = config_combine["experiment_numbers"]["experiment_start"]
-    experiment_end = config_combine["experiment_numbers"]["experiment_end"]
-    experiment_step = config_combine["experiment_numbers"]["experiment_step"]
-
-    experiment_numbers_combine = list(range(experiment_start, experiment_end + 1, experiment_step))
+    experiment_numbers_combine = config_combine["user_inputs"]["experiment_numbers"]
     print("The experiment numbers to combine are: ", experiment_numbers_combine, sep='\n', end='\n\n')
     
     return input_text_path_combine, output_text_path_combine, intensity_type, experiment_numbers_combine

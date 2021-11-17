@@ -5,8 +5,8 @@ import os
 drive = "/mnt/iusers01/jf01/mbcx9cd4/rds_lightform/"
 
 # properties of the data files.
-datafile_directory = drive + 'SXRD_analysis/diamond_2021/103840/texture-cpf'
-datafile_Basename  = "103840_summed"
+datafile_directory = drive + 'SXRD_analysis/diamond_2021/103851/texture-cpf'
+datafile_Basename  = "103851_summed1"
 datafile_Ending    = ".tiff"
 datafile_StartNum  = 1
 datafile_EndNum    = 1
@@ -439,6 +439,6 @@ fit_orders = [
 	]
 
 # output settings
-Output_directory   = drive + 'SXRD_analysis/diamond_2021/103840/texture-cpf/103840-cpf-output/'
+Output_directory   = drive + 'SXRD_analysis/diamond_2021/103851/texture-cpf/103851-cpf-output/'
 Output_type        = 'MultiFit' #'DifferentialStrain' # differential strain option gives the principal stress/strain axis
 Output_NumAziWrite = 360
