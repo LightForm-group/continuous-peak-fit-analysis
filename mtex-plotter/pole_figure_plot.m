@@ -1,5 +1,7 @@
 function [maxval] = pole_figure_plot(phase, ori, CS, contour_step, pf_max, output_filename);
-% A function for plotting alpha (hexagonal close-packed) or beta (body-centred-cubic) pole figures using MTEX
+% POLE_FIGURE_PLOT
+%   A function for plotting alpha (hexagonal close-packed) or beta
+%   (body-centred-cubic) pole figures using MTEX
 
   if strcmp(phase, 'alpha');
     PF = figure();

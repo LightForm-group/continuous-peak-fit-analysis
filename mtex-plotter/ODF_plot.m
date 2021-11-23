@@ -1,5 +1,7 @@
 function [  ] = ODF_plot(phase, odf, odf_max, output_filename, specSym);
-% A function for plotting slices of the alpha (hexagonal close-packed) or beta (body-centred-cubic) ODF using MTEX
+% ODF_PLOT
+%   A function for plotting slices of the alpha (hexagonal close-packed) or
+%   beta (body-centred-cubic) ODF using MTEX
 
   if strcmp(phase, 'alpha');
     ODF_fig = figure();
