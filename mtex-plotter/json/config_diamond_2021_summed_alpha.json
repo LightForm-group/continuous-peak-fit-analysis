@@ -1,0 +1,37 @@
+{
+	"experiment_number": 
+	{
+		"value": 103845,
+		"characters": 6
+	},
+	"test_number":
+	{
+		"start": 1,
+		"end": 1,
+		"step": 1,
+		"characters": 5
+	},
+	"phase": "alpha",
+	"plotting_convention":
+	{
+		"xAxisDirection": "north",
+		"zAxisDirection": "intoPlane"
+	},
+	"rotation":
+    {
+        "euler1": 0,
+        "euler2": 0,
+        "euler3": 0
+    },
+	"pole_figure_params":
+	{
+		"pf_max": 5,
+		"contour_step": 0.5
+	},
+	"odf_params":
+	{
+		"odf_resolution": 10,
+		"odf_max": 8,
+		"odf_misorientation": 5
+	}
+}

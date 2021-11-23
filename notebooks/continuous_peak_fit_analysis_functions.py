@@ -123,9 +123,17 @@ def extract_combine_intensity_input(config_path: str):
     experiment_numbers_combine = config_combine["user_inputs"]["experiment_numbers"]
     print("The experiment numbers to combine are: ", experiment_numbers_combine, sep='\n', end='\n\n')
     
-    return input_text_path_combine, output_text_path_combine, intensity_type, experiment_numbers_combine
+    start_combine = config_combine["image_numbers"]["start"]
+    end_combine = config_combine["image_numbers"]["end"]
+    step_combine = config_combine["image_numbers"]["step"]
+    print("The start is: ", start_combine, "The end is: ", end_combine, "The step is: ", step_combine, sep='\n', end='\n\n')
 
-def extract_powder_intensity_input(config_path:str):
+    # number and spacing of files
+    image_numbers_combine = get_image_numbers(start_combine, end_combine, step_combine)
+    
+    return input_text_path_combine, output_text_path_combine, intensity_type, experiment_numbers_combine, image_numbers_combine
+
+def extract_powder_intensity_input(config_path: str):
     """Extract user inputs from yaml configuration file. 
     Extract input and output file paths, peak labels, data 
     resolution and image numbers. These inputs are used
@@ -311,10 +319,10 @@ def intensity_to_texture_file(experiment_number: int, intensity_type: str, outpu
                                       f'{peak_intensity[image_number][label][i]}\n')
         count+=1
         
-    print(f"Written '{count}' {intensity_type} intensity .txt data files to: '{output_path}'.")
+    print(f"Written '{count}' set of {intensity_type} intensity .txt data files to: '{output_path}'.")
             
 def combine_texture_files (input_text_path: str, output_text_path: str, intensity_type: str, 
-                           peak_label: list, experiment_numbers: List[int]):
+                           peak_label: list, experiment_numbers: List[int], image_numbers: List[int]):
     """This function combines the intensity and spherical polar coordinates of
     multiple files into one file, by writing the data sequentially to a new 
     text file.
@@ -330,31 +338,33 @@ def combine_texture_files (input_text_path: str, output_text_path: str, intensit
     experiment_start = experiment_numbers[0]
     experiment_end = experiment_numbers[-1]
 
-    for label in tqdm(peak_label):
-        output_path = output_text_path.format(experiment_start=experiment_start, experiment_end=experiment_end, intensity_type=intensity_type, label=label)
-        output_folder = pathlib.Path(output_path).parent
-        output_folder.mkdir(exist_ok=True)
-        # overwrite any existing output file
-        
-        with open(output_path, 'w') as output_file:
-            # write metadata for the top of the file
-            output_file.write('Polar Angle \t Azimuth Angle \t Intensity \n')
-        
-        for experiment_number in experiment_numbers:
-            input_path = input_text_path.format(experiment_number=experiment_number, intensity_type=intensity_type, label=label)
-       
-            # open output file in append mode to add lines
-            with open(output_path, 'a') as output_file:
-                
-                with open(input_path, 'r') as results_file:  
-                    line = results_file.readline()
-                    line = results_file.readline()
-                    
-                    while line:
-                        output_file.write(line)
+    for image_number in image_numbers:
+    
+        for label in tqdm(peak_label):
+            output_path = output_text_path.format(experiment_start=experiment_start, experiment_end=experiment_end, intensity_type=intensity_type, image_number=image_number, label=label)
+            output_folder = pathlib.Path(output_path).parent
+            output_folder.mkdir(exist_ok=True)
+            # overwrite any existing output file
+
+            with open(output_path, 'w') as output_file:
+                # write metadata for the top of the file
+                output_file.write('Polar Angle \t Azimuth Angle \t Intensity \n')
+
+            for experiment_number in experiment_numbers:
+                input_path = input_text_path.format(experiment_number=experiment_number, intensity_type=intensity_type, image_number=image_number, label=label)
+
+                # open output file in append mode to add lines
+                with open(output_path, 'a') as output_file:
+
+                    with open(input_path, 'r') as results_file:  
+                        line = results_file.readline()
                         line = results_file.readline()
 
-        print(f"Written {intensity_type} intensity data for '...{input_path[-24:]}' to: '...{output_path[-33:]}'.")
+                        while line:
+                            output_file.write(line)
+                            line = results_file.readline()
+
+            print(f"Written {intensity_type} intensity data for '...{input_path[-24:]}' to: '...{output_path[-35:]}'.")
         
 def calibrate_intensity_to_powder(peak_intensity: dict, powder_peak_intensity: dict,
                                   powder_peak_label: List[str], image_numbers: List[int], powder_start: int = 1):

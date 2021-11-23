@@ -8,17 +8,17 @@ file_paths:
     input_fit_path: ../../../SXRD_analysis/diamond_2021/{experiment_number:05d}/texture-cpf/{experiment_number:05d}-cpf-output/{experiment_number:05d}_summed{image_number:01d}.fit
 # input path of the results .fit file, excluding the experiment number and image number
     
-    output_text_path: ../../../SXRD_analysis/diamond_2021/{experiment_number:05d}/texture-cpf/{experiment_number:05d}-{intensity_type}-intensities/{experiment_number:05d}_summed{image_number:01d}_peak_intensity_{label}.txt
+    output_text_path: ../../../SXRD_analysis/diamond_2021/{experiment_number:05d}/texture-cpf/{experiment_number:05d}-{intensity_type}-intensities/{experiment_number:05d}_summed_{image_number:01d}_peak_intensity_{label}.txt
 # output path for the texture text file, excluding the experiment number, intensity type, image number and lattice plane peak label.
     
 user_inputs: 
-    experiment_number: 103845
+    experiment_number: 103851
 # experiment number of the test
     
     data_resolution: 1
 # azimuthal data resolution of the intensity in degrees, usually output as 1 degree from Continuous_Peak_Fit.
     
-    sample_orientation: S1
+    sample_orientation: S3
 # sample orientation from options S1, S2, S3, S4, S5, S6, directly related to the Cartesian alignment of 'YZ', 'XZ', 'XY', 'YX to YZ', 'XY to XZ', 'XZ to YZ'.
     
     peak_label:
