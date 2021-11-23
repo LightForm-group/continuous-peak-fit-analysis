@@ -1,17 +1,17 @@
 {
 	"experiment_number": 
 	{
-		"value": 103845,
+		"value": 000000,
 		"characters": 6
 	},
 	"test_number":
 	{
 		"start": 1,
-		"end": 387,
+		"end": 1,
 		"step": 1,
-		"characters": 5
+		"characters": 1
 	},
-	"data_type": "individual",
+	"data_type": "combined",
 	"phase": "beta",
 	"plotting_convention":
 	{

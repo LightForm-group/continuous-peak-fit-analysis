@@ -1,6 +1,7 @@
 function [TEXTURE_INDEX, odf_strength_max, phi1, PHI, phi2,...
-PF_001_max, PF_110_max, PF_111_max] = beta_texture_plotter(user_inputs_filepath, inputDir, outputDir, output_text_file, ....
+PF_001_max, PF_110_max, PF_111_max] = beta_texture_plotter(user_inputs_filepath, inputDir, data_type,... 
                                                                                             phase, experiment_number_string, test_number, testFormat,... 
+                                                                                            outputDir, output_text_file,....
                                                                                             CS, odf_max, odf_resolution, odf_misorientation,...
                                                                                             euler1, euler2, euler3,...
                                                                                             pf_max, pf_contour_step)                                                                                                                                                                           
@@ -13,10 +14,23 @@ PF_001_max, PF_110_max, PF_111_max] = beta_texture_plotter(user_inputs_filepath,
         % define test number
         test_number_string = num2str(test_number(i), testFormat)
 
-        % path to files
-        pname = strcat(inputDir, '/', experiment_number_string, '_', test_number_string, '_peak_intensity_');
+        if strcmp(data_type, 'individual')
+            % path to files
+            pname = strcat(inputDir, '/', experiment_number_string, '_', test_number_string, '_peak_intensity_');
         
-        if strcmp(user_inputs_filepath, 'json/config_diamond_2021_beta.json')
+        elseif strcmp(data_type, 'summed')
+            % path to files
+            pname = strcat(inputDir, '/', experiment_number_string, '_summed_', test_number_string, '_peak_intensity_');
+
+        elseif strcmp(data_type, 'combined')
+            % path to files
+            pname = strcat(inputDir, '/combined_', test_number_string, '_peak_intensity_');
+            experiment_number_string = 'combined'
+        else
+            disp('Date type not recognised, choose from individual, summed, or combined');
+        end
+        
+        if contains(user_inputs_filepath, 'json/config_diamond_2021')
             disp('Using 4 beta lattice plane peaks to refine beta texture.');
             % which files to be imported
             fname = { ...
@@ -34,7 +48,7 @@ PF_001_max, PF_110_max, PF_111_max] = beta_texture_plotter(user_inputs_filepath,
               Miller(3,1,0,CS),...
               };
           
-        elseif strcmp(user_inputs_filepath, 'json/config_diamond_2017_beta.json')
+        elseif contains(user_inputs_filepath, 'json/config_diamond_2017')
             disp('Using 5 beta lattice plane peaks to refine beta texture.');
            
             % which files to be imported

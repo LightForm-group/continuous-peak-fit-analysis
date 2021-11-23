@@ -1,9 +1,10 @@
 function [TEXTURE_INDEX, odf_strength_max, phi1, PHI, phi2,...
-PF_basal_max, PF_prismatic1_max, PF_prismatic2_max] = alpha_texture_plotter(user_inputs_filepath, inputDir, outputDir, output_text_file, ....
+PF_basal_max, PF_prismatic1_max, PF_prismatic2_max] = alpha_texture_plotter(user_inputs_filepath, inputDir, data_type,... 
                                                                                             phase, experiment_number_string, test_number, testFormat,... 
-                                                                                             CS, odf_max, odf_resolution, odf_misorientation,...
-                                                                                             euler1, euler2, euler3,...
-                                                                                             pf_max, pf_contour_step)                                                                                                                                                                           
+                                                                                            outputDir, output_text_file,....
+                                                                                            CS, odf_max, odf_resolution, odf_misorientation,...
+                                                                                            euler1, euler2, euler3,...
+                                                                                            pf_max, pf_contour_step)                                                                                                                                                                           
 % ALPHA_TEXTURE_PLOTTER
 %   A function for the batch processing of synchrotron intensity data for
 %   texture calculation, plotting of pole figures, plotting of ODFs and
@@ -12,11 +13,24 @@ PF_basal_max, PF_prismatic1_max, PF_prismatic2_max] = alpha_texture_plotter(user
     for i = 1:length(test_number)
         % define test number
         test_number_string = num2str(test_number(i), testFormat)
+        
+        if strcmp(data_type, 'individual')
+            % path to files
+            pname = strcat(inputDir, '/', experiment_number_string, '_', test_number_string, '_peak_intensity_');
+        
+        elseif strcmp(data_type, 'summed')
+            % path to files
+            pname = strcat(inputDir, '/', experiment_number_string, '_summed_', test_number_string, '_peak_intensity_');
 
-        % path to files
-        pname = strcat(inputDir, '/', experiment_number_string, '_', test_number_string, '_peak_intensity_');
-
-        if strcmp(user_inputs_filepath, 'json/config_diamond_2021_alpha.json')
+        elseif strcmp(data_type, 'combined')
+            % path to files
+            pname = strcat(inputDir, '/combined_', test_number_string, '_peak_intensity_');
+            experiment_number_string = 'combined'
+        else
+            disp('Date type not recognised, choose from individual, summed, or combined');
+        end
+              
+        if contains(user_inputs_filepath, 'json/config_diamond_2021')
             disp('Using 21 alpha lattice plane peaks to refine alpha texture.');
             % which files to be imported
             fname = { ...
@@ -68,7 +82,7 @@ PF_basal_max, PF_prismatic1_max, PF_prismatic2_max] = alpha_texture_plotter(user
               Miller(3, 0,-3, 1,CS),...
               };
         
-        elseif strcmp(user_inputs_filepath, 'json/config_diamond_2017_alpha.json')
+        elseif contains(user_inputs_filepath, 'json/config_diamond_2017')
             disp('Using 11 alpha lattice plane peaks to refine alpha texture.');
             % which files to be imported
             fname = { ...

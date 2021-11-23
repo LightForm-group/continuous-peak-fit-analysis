@@ -11,6 +11,7 @@
 		"step": 1,
 		"characters": 5
 	},
+	"data_type": "individual",
 	"phase": "alpha",
 	"plotting_convention":
 	{
