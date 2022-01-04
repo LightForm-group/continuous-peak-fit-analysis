@@ -232,7 +232,9 @@ def read_fit_results (experiment_number: int, input_fit_path: str, peak_label: l
 
 def sample_to_plane(sample_orientation: str):
     """Return a Cartesian circle plane type for a given sample orienation type"""
-    sample_to_plane = {'S1': 'YZ', 'S2': 'XZ', 'S3': 'XY', 'S4': 'YX to YZ', 'S5': 'XY to XZ', 'S6': 'XZ to YZ'}
+    sample_to_plane = {'S1': 'YZ', 'S2': 'XZ', 'S3': 'XY', 
+                       'S1R': 'ZY', 'S2R': 'ZX', 'S3R': 'YX', 
+                       'S4': 'YX to YZ', 'S5': 'XY to XZ', 'S6': 'XZ to YZ'}
     plane = sample_to_plane[sample_orientation]
     return plane
 
@@ -290,6 +292,21 @@ def intensity_to_texture_file(experiment_number: int, intensity_type: str, outpu
                         x = 0
                         y = np.cos(np.deg2rad(alpha))
                         z = np.sin(np.deg2rad(alpha))
+                        
+                    if plane == 'YX':
+                        x = np.sin(np.deg2rad(alpha))
+                        y = np.cos(np.deg2rad(alpha))
+                        z = 0
+
+                    if plane == 'ZX':
+                        x = np.sin(np.deg2rad(alpha))
+                        y = 0
+                        z = np.cos(np.deg2rad(alpha))
+
+                    if plane == 'ZY':
+                        x = 0
+                        y = np.sin(np.deg2rad(alpha))
+                        z = np.cos(np.deg2rad(alpha))
 
                     if plane == 'XY to XZ':
                         x = np.cos(np.deg2rad(alpha))
