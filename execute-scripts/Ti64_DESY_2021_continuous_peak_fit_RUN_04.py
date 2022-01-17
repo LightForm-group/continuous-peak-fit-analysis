@@ -88,9 +88,3 @@ input_file = f"{input_filepath}{input_filename}"
 print(input_file)
 cpf.XRD_FitPattern.execute(input_file)
 # cpf.XRD_FitPattern.writeoutput(input_file)
-input_filepath = "../../../SXRD_analysis/desy_2021/experiment04-deformation/fourier-peak-analysis/"
-input_filename = "INPUT_DESY-2021_Ti64_High_Temp_16alpha_4beta_iCSF_15.py"
-input_file = f"{input_filepath}{input_filename}"
-print(input_file)
-cpf.XRD_FitPattern.execute(input_file)
-# cpf.XRD_FitPattern.writeoutput(input_file)

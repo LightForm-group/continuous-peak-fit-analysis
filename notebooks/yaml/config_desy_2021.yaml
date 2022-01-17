@@ -18,7 +18,7 @@ user_inputs:
     data_resolution: 1
 # azimuthal data resolution of the intensity in degrees, usually output as 1 degree from Continuous_Peak_Fit.
     
-    sample_orientation: S2R
+    sample_orientation: S1R
 # sample orientation from options S1, S2, S3, S4, S5, S6, directly related to the Cartesian alignment of 'YZ', 'XZ', 'XY', 'YX to YZ', 'XY to XZ', 'XZ to YZ'.
 # rotated sample orientation from options S1R, S2R, S3R, directly related to the Cartesian alignment of 'ZY', 'ZX', 'YX'. 
     

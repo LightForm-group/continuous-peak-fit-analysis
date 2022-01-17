@@ -6,10 +6,13 @@
 	},
 	"test_number":
 	{
-		"start": 1,
-		"end": 387,
-		"step": 1,
-		"characters": 5
+		"characters": 5,
+		"stage1":
+		{
+			"start": [2, 45, 88, 131, 174, 217, 260, 303, 346],
+			"end": [42, 85, 128, 171, 214, 257, 300, 343, 386],
+			"step": [1, 1, 1, 1, 1, 1, 1, 1, 1]
+		}
 	},
 	"data_type": "individual",
 	"phase": "beta",
