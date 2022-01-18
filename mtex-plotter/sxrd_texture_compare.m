@@ -1,8 +1,8 @@
 %% SXRD_TEXTURE_PLOTTER
 % This script can be used  for the batch processing of synchrotron
 % intensity data, written in spherical polar coordinate format.
-% The script can be used for texture calculation, plotting of pole figures, 
-% plotting of ODFs and calculation of texture strength values. 
+% The script can be used for plotting the difference between ODFs, 
+% to compare an analysis ODF with a standard ODF. 
 % It can currently be used for both alpha and beta phases in titanium alloys.
 % But, it could easily be adapted for any phase in a crystal material...
 
@@ -10,11 +10,11 @@
 
 % Define the user input configuration file here...
 % Note, this should be the only line you need to change in this script.
-% Then you will be asked to select an input folder, containing  the
-% intensity data files, and then asked to select an output folder, to save
-% the ODFs, PFs and a text file containing the texture strength values.
-user_inputs_filepath = 'json/config_diamond_2021_summed_alpha.json'
-user_inputs_filepath = 'json/config_desy_2021_alpha_05.json'
+% Then you will be asked to select an input folder, containing the
+% intensity data files for the standard ODF, followed by another input folder,
+% containing  the data for the analysis ODF, and then asked to select an output folder, 
+% to save the figures showing the differences between the two ODFs.
+user_inputs_filepath = 'json/config_diamond_2021_combined_alpha.json'
 
 %% Load user inputs from JSON file
 
@@ -85,8 +85,11 @@ odf_misorientation = user_inputs.odf_params.odf_misorientation
 for i = 1:number_of_stages
     stage = test_number_fields{i+1}
     
-    disp('Please navigate to the input directory, where the texture intensity data files are stored.');
-    inputDir.(stage) = uigetdir; % gets input directory
+    disp('Please navigate to the input directory, where the texture intensity data files are stored - for the standard odf to be subtracted');
+    inputDir1.(stage) = uigetdir; % gets input directory
+    
+    disp('Please navigate to the input directory, where the texture intensity data files are stored - for the test odf to analyse.');
+    inputDir2.(stage) = uigetdir; % gets input directory
 
     disp('Please navigate to the output directory, where you would like to save the texture results.');
     outputDir.(stage) = uigetdir; % gets output directory
@@ -137,7 +140,7 @@ end
 
 %% Analyse Intensity Data
 
-odf_return = 'no'
+odf_return = 'yes'
 
 for i = 1:number_of_stages
     
@@ -152,15 +155,38 @@ for i = 1:number_of_stages
         % define alpha crystal symmetry
         CS = crystalSymmetry('6/mmm', [2.954 2.954 4.729], 'X||a*', 'Y||b', 'Z||c*', 'mineral', 'Titanium Alpha', 'color', 'light blue');
         
-        % analyse, plot and save alpha texture
+        % analyse, plot and save alpha texture for the standard ODF
         [TEXTURE_INDEX, odf_strength_max, phi1, PHI, phi2,...
-        PF_basal_max, PF_prismatic1_max, PF_prismatic2_max, odf] = alpha_texture_plotter(user_inputs_filepath, inputDir.(stage), data_type,... 
+        PF_basal_max, PF_prismatic1_max, PF_prismatic2_max, odf_standard] = alpha_texture_plotter(user_inputs_filepath, inputDir1.(stage), data_type,... 
                                                                                                 phase, experiment_number_string, test_number.(stage), testFormat,... 
                                                                                                 outputDir.(stage), output_text_file,....
                                                                                                 CS, odf_max, odf_resolution, odf_misorientation,...
                                                                                                 euler1, euler2, euler3,...
                                                                                                 pf_max, pf_contour_step,...
-                                                                                                odf_return)      
+                                                                                                odf_return)
+                                                                                            
+        % analyse, plot and save alpha texture for the analysis ODF
+        [TEXTURE_INDEX, odf_strength_max, phi1, PHI, phi2,...
+        PF_basal_max, PF_prismatic1_max, PF_prismatic2_max, odf_analysis] = alpha_texture_plotter(user_inputs_filepath, inputDir2.(stage), data_type,... 
+                                                                                                phase, experiment_number_string, test_number.(stage), testFormat,... 
+                                                                                                outputDir.(stage), output_text_file,....
+                                                                                                CS, odf_max, odf_resolution, odf_misorientation,...
+                                                                                                euler1, euler2, euler3,...
+                                                                                                pf_max, pf_contour_step,...
+                                                                                                odf_return)
+         % subtract the ODFs
+         odf_subtract1 = odf_analysis - odf_standard
+         odf_subtract2 = odf_standard - odf_analysis
+         
+         % plot the subtracted ODFs
+         specSym = 'orthorhombic';
+         output_filename = strcat(outputDir.(stage),'/',experiment_number_string,'_ODF_subtracted1')
+         ODF_plot(phase, odf_subtract1, odf_max, output_filename, specSym)
+         
+         specSym = 'orthorhombic';
+         output_filename = strcat(outputDir.(stage),'/',experiment_number_string,'_ODF_subtracted2')
+         ODF_plot(phase, odf_subtract2, odf_max, output_filename, specSym)
+                                                                                            
     elseif strcmp(phase, 'beta')
         % print header for beta phase texture measurements
         fprintf(output_text_file, 'Test Number \t Texture Index \t ODF Max \t phi1 Angle of ODF Max \t PHI Angle of ODF Max \t phi2 Angle of ODF Max \t {001} PF Max \t {110} PF Max \t {111} PF Max \n');
@@ -168,15 +194,39 @@ for i = 1:number_of_stages
         % define beta crystal symmetry
         CS = crystalSymmetry('m-3m', [3.192 3.192 3.192], 'mineral', 'Titanium Beta', 'color', 'light green');
         
-        % analyse, plot and save beta texture
+        % analyse, plot and save beta texture for the standard ODF
         [TEXTURE_INDEX, odf_strength_max, phi1, PHI, phi2,...
-        PF_001_max, PF_110_max, PF_111_max, odf] = beta_texture_plotter(user_inputs_filepath, inputDir.(stage), data_type,... 
+        PF_001_max, PF_110_max, PF_111_max, odf_standard] = beta_texture_plotter(user_inputs_filepath, inputDir1.(stage), data_type,... 
                                                                                                 phase, experiment_number_string, test_number.(stage), testFormat,... 
                                                                                                 outputDir.(stage), output_text_file,....
                                                                                                 CS, odf_max, odf_resolution, odf_misorientation,...
                                                                                                 euler1, euler2, euler3,...
                                                                                                 pf_max, pf_contour_step,...
                                                                                                 odf_return)
+                                                                                            
+        % analyse, plot and save beta texture for the standard ODF
+        [TEXTURE_INDEX, odf_strength_max, phi1, PHI, phi2,...
+        PF_001_max, PF_110_max, PF_111_max, odf_analysis] = beta_texture_plotter(user_inputs_filepath, inputDir2.(stage), data_type,... 
+                                                                                                phase, experiment_number_string, test_number.(stage), testFormat,... 
+                                                                                                outputDir.(stage), output_text_file,....
+                                                                                                CS, odf_max, odf_resolution, odf_misorientation,...
+                                                                                                euler1, euler2, euler3,...
+                                                                                                pf_max, pf_contour_step,...
+                                                                                                odf_return)
+                                                                                            
+         % subtract the ODFs
+         odf_subtract1 = odf_analysis - odf_standard
+         odf_subtract2 = odf_standard - odf_analysis
+         
+         % plot the subtracted ODFs
+         specSym = 'orthorhombic';
+         output_filename = strcat(outputDir.(stage),'/',experiment_number_string,'_ODF_subtracted1')
+         ODF_plot(phase, odf_subtract1, odf_max, output_filename, specSym)
+         
+         specSym = 'orthorhombic';
+         output_filename = strcat(outputDir.(stage),'/',experiment_number_string,'_ODF_subtracted2')
+         ODF_plot(phase, odf_subtract2, odf_max, output_filename, specSym)
+         
     else
         disp('Phase not recognised.');
         return;

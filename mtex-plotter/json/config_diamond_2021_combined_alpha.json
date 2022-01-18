@@ -35,7 +35,7 @@
 	"odf_params":
 	{
 		"odf_resolution": 10,
-		"odf_max": 8,
+		"odf_max": 2,
 		"odf_misorientation": 5
 	}
 }

@@ -13,8 +13,7 @@
 % Then you will be asked to select an input folder, containing  the
 % intensity data files, and then asked to select an output folder, to save
 % the ODFs, PFs and a text file containing the texture strength values.
-user_inputs_filepath = 'json/config_diamond_2021_summed_alpha.json'
-user_inputs_filepath = 'json/config_desy_2021_alpha_05.json'
+user_inputs_filepath = 'json/config_diamond_2021_combined_alpha.json'
 
 %% Load user inputs from JSON file
 
@@ -87,6 +86,8 @@ for i = 1:number_of_stages
     
     disp('Please navigate to the input directory, where the texture intensity data files are stored.');
     inputDir.(stage) = uigetdir; % gets input directory
+    
+    
 
     disp('Please navigate to the output directory, where you would like to save the texture results.');
     outputDir.(stage) = uigetdir; % gets output directory
@@ -137,8 +138,6 @@ end
 
 %% Analyse Intensity Data
 
-odf_return = 'no'
-
 for i = 1:number_of_stages
     
     % define output path open file to save the texture values
@@ -151,32 +150,26 @@ for i = 1:number_of_stages
 
         % define alpha crystal symmetry
         CS = crystalSymmetry('6/mmm', [2.954 2.954 4.729], 'X||a*', 'Y||b', 'Z||c*', 'mineral', 'Titanium Alpha', 'color', 'light blue');
-        
-        % analyse, plot and save alpha texture
         [TEXTURE_INDEX, odf_strength_max, phi1, PHI, phi2,...
-        PF_basal_max, PF_prismatic1_max, PF_prismatic2_max, odf] = alpha_texture_plotter(user_inputs_filepath, inputDir.(stage), data_type,... 
+        PF_basal_max, PF_prismatic1_max, PF_prismatic2_max] = alpha_texture_plotter(user_inputs_filepath, inputDir.(stage), data_type,... 
                                                                                                 phase, experiment_number_string, test_number.(stage), testFormat,... 
                                                                                                 outputDir.(stage), output_text_file,....
                                                                                                 CS, odf_max, odf_resolution, odf_misorientation,...
                                                                                                 euler1, euler2, euler3,...
-                                                                                                pf_max, pf_contour_step,...
-                                                                                                odf_return)      
+                                                                                                pf_max, pf_contour_step)      
     elseif strcmp(phase, 'beta')
         % print header for beta phase texture measurements
         fprintf(output_text_file, 'Test Number \t Texture Index \t ODF Max \t phi1 Angle of ODF Max \t PHI Angle of ODF Max \t phi2 Angle of ODF Max \t {001} PF Max \t {110} PF Max \t {111} PF Max \n');
 
         % define beta crystal symmetry
         CS = crystalSymmetry('m-3m', [3.192 3.192 3.192], 'mineral', 'Titanium Beta', 'color', 'light green');
-        
-        % analyse, plot and save beta texture
         [TEXTURE_INDEX, odf_strength_max, phi1, PHI, phi2,...
-        PF_001_max, PF_110_max, PF_111_max, odf] = beta_texture_plotter(user_inputs_filepath, inputDir.(stage), data_type,... 
+        PF_001_max, PF_110_max, PF_111_max] = beta_texture_plotter(user_inputs_filepath, inputDir.(stage), data_type,... 
                                                                                                 phase, experiment_number_string, test_number.(stage), testFormat,... 
                                                                                                 outputDir.(stage), output_text_file,....
                                                                                                 CS, odf_max, odf_resolution, odf_misorientation,...
                                                                                                 euler1, euler2, euler3,...
-                                                                                                pf_max, pf_contour_step,...
-                                                                                                odf_return)
+                                                                                                pf_max, pf_contour_step)
     else
         disp('Phase not recognised.');
         return;

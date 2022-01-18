@@ -1,10 +1,11 @@
 function [TEXTURE_INDEX, odf_strength_max, phi1, PHI, phi2,...
-PF_001_max, PF_110_max, PF_111_max] = beta_texture_plotter(user_inputs_filepath, inputDir, data_type,... 
+PF_001_max, PF_110_max, PF_111_max, returned_odf] = beta_texture_plotter(user_inputs_filepath, inputDir, data_type,... 
                                                                                             phase, experiment_number_string, test_number, testFormat,... 
                                                                                             outputDir, output_text_file,....
                                                                                             CS, odf_max, odf_resolution, odf_misorientation,...
                                                                                             euler1, euler2, euler3,...
-                                                                                            pf_max, pf_contour_step)                                                                                                                                                                           
+                                                                                            pf_max, pf_contour_step, ...
+                                                                                            odf_return)                                                                                                                                                                           
 % BETA_TEXTURE_PLOTTER
 %   A function for the batch processing of synchrotron intensity data for
 %   texture calculation, plotting of pole figures, plotting of ODFs and
@@ -168,5 +169,14 @@ PF_001_max, PF_110_max, PF_111_max] = beta_texture_plotter(user_inputs_filepath,
         % write the texture values to file
         %fprintf(output_text_file, '%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\n', test_number(i), TEXTURE_INDEX(i), odf_strength_max(i), rad2deg(phi1(i)), rad2deg(PHI(i)), rad2deg(phi2(i)), PF_001_max(i), PF_110_max(i), PF_111_max(i), rotated_cube_volume_fraction(i))
         fprintf(output_text_file, '%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\n', test_number(i), TEXTURE_INDEX(i), odf_strength_max(i), rad2deg(phi1(i)), rad2deg(PHI(i)), rad2deg(phi2(i)), PF_001_max(i), PF_110_max(i), PF_111_max(i))
+        
+        % return ODF if requested
+        if contains(odf_return, 'y') || contains(odf_return, 'Y') || contains(odf_return, 'yes') || contains(odf_return, 'YES')
+            returned_odf = odf
+        elseif contains(odf_return, 'n') || contains(odf_return, 'N') || contains(odf_return, 'no') || contains(odf_return, 'NO')   
+            returned_odf = 0
+        else
+            disp('ODF return option not recognised.');
+        end
     end
 end
