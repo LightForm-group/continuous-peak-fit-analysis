@@ -32,7 +32,7 @@ returned_odf] = alpha_texture_plotter(user_inputs_filepath, inputDir, data_type,
             disp('Date type not recognised, choose from individual, summed, or combined');
         end
               
-        if contains(user_inputs_filepath, 'json/config_diamond_2021')
+        if contains(user_inputs_filepath, 'config_diamond_2021')
             disp('Using 21 alpha lattice plane peaks to refine alpha texture.');
             % which files to be imported
             fname = { ...
@@ -84,7 +84,7 @@ returned_odf] = alpha_texture_plotter(user_inputs_filepath, inputDir, data_type,
               Miller(3, 0,-3, 1,CS),...
               };
         
-        elseif contains(user_inputs_filepath, 'json/config_diamond_2017')
+        elseif contains(user_inputs_filepath, 'config_diamond_2017')
             disp('Using 11 alpha lattice plane peaks to refine alpha texture.');
             % which files to be imported
             fname = { ...
@@ -116,7 +116,7 @@ returned_odf] = alpha_texture_plotter(user_inputs_filepath, inputDir, data_type,
               Miller(2, 0,-2, 2,CS),...
               };
           
-        elseif contains(user_inputs_filepath, 'json/config_desy_2021')
+        elseif contains(user_inputs_filepath, 'config_desy_2021')
             disp('Using 14 alpha lattice plane peaks to refine alpha texture.');
             % which files to be imported
             fname = { ...

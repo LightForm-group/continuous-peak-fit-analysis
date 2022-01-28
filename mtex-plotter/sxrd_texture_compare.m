@@ -14,7 +14,7 @@
 % intensity data files for the standard ODF, followed by another input folder,
 % containing  the data for the analysis ODF, and then asked to select an output folder, 
 % to save the figures showing the differences between the two ODFs.
-user_inputs_filepath = 'json/config_diamond_2021_combined_alpha.json'
+user_inputs_filepath = 'json/diamond/config_diamond_2021_combined_alpha.json'
 
 %% Load user inputs from JSON file
 

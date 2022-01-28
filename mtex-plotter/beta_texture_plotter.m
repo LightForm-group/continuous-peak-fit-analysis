@@ -31,7 +31,7 @@ PF_001_max, PF_110_max, PF_111_max, returned_odf] = beta_texture_plotter(user_in
             disp('Date type not recognised, choose from individual, summed, or combined');
         end
         
-        if contains(user_inputs_filepath, 'json/config_diamond_2021')
+        if contains(user_inputs_filepath, 'config_diamond_2021')
             disp('Using 4 beta lattice plane peaks to refine beta texture.');
             % which files to be imported
             fname = { ...
@@ -49,7 +49,7 @@ PF_001_max, PF_110_max, PF_111_max, returned_odf] = beta_texture_plotter(user_in
               Miller(3,1,0,CS),...
               };
           
-        elseif contains(user_inputs_filepath, 'json/config_diamond_2017')
+        elseif contains(user_inputs_filepath, 'config_diamond_2017')
             disp('Using 5 beta lattice plane peaks to refine beta texture.');
            
             % which files to be imported
@@ -70,7 +70,7 @@ PF_001_max, PF_110_max, PF_111_max, returned_odf] = beta_texture_plotter(user_in
               Miller(3,1,0,CS),...
               };
                     
-        elseif contains(user_inputs_filepath, 'json/config_desy_2021')
+        elseif contains(user_inputs_filepath, 'config_desy_2021')
             disp('Using 4 beta lattice plane peaks to refine beta texture.');
            
             % which files to be imported

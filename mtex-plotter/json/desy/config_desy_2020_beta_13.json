@@ -1,0 +1,41 @@
+{
+	"experiment_number": 
+	{
+		"value": 13,
+		"characters": 2
+	},
+	"test_number":
+	{
+		"characters": 5,
+		"stage1":
+		{
+			"start": [1, 1900, 2100],
+			"end": [1900, 2100, 4439],
+			"step": [50, 1, 50]
+		}
+	},
+	"data_type": "individual",
+	"phase": "beta",
+	"plotting_convention":
+	{
+		"xAxisDirection": "north",
+		"zAxisDirection": "intoPlane"
+	},
+	"rotation":
+    {
+        "euler1": 0,
+        "euler2": 0,
+        "euler3": 0
+    },
+	"pole_figure_params":
+	{
+		"pf_max": 3,
+		"contour_step": 0.25
+	},
+	"odf_params":
+	{
+		"odf_resolution": 10,
+		"odf_max": 5,
+		"odf_misorientation": 5
+	}
+}

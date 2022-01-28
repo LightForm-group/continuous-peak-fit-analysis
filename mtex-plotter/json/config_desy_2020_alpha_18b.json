@@ -1,0 +1,65 @@
+{
+	"experiment_number": 
+	{
+		"value": 18,
+		"characters": 2
+	},
+	"test_number":
+	{
+		"characters": 5,
+		"stage1":
+		{
+			"start": [1, 1900],
+			"end": [1900, 2007],
+			"step": [50, 1]
+		},
+		"stage2":
+		{
+			"start": [1, 290, 320],
+			"end": [290, 320, 515],
+			"step": [5, 1, 5]
+		},
+		"stage3":
+		{
+			"start": [1, 260, 290],
+			"end": [260, 290, 514],
+			"step": [5, 1, 5]
+		},
+		"stage4":
+		{
+			"start": [1, 230, 270],
+			"end": [230, 270, 514],
+			"step": [5, 1, 5]
+		},
+		"stage5":
+		{
+			"start": [1, 230, 270],
+			"end": [230, 270, 2275],
+			"step": [5, 1, 50]
+		}
+	},
+	"data_type": "individual",
+	"phase": "alpha",
+	"plotting_convention":
+	{
+		"xAxisDirection": "north",
+		"zAxisDirection": "intoPlane"
+	},
+	"rotation":
+    {
+        "euler1": 0,
+        "euler2": 0,
+        "euler3": 0
+    },
+	"pole_figure_params":
+	{
+		"pf_max": 3,
+		"contour_step": 0.25
+	},
+	"odf_params":
+	{
+		"odf_resolution": 10,
+		"odf_max": 5,
+		"odf_misorientation": 5
+	}
+}

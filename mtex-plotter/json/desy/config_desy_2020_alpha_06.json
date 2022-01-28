@@ -1,7 +1,7 @@
 {
 	"experiment_number": 
 	{
-		"value": 4,
+		"value": 6,
 		"characters": 2
 	},
 	"test_number":
@@ -9,33 +9,9 @@
 		"characters": 5,
 		"stage1":
 		{
-			"start": [1, 1900],
-			"end": [1900, 2034],
-			"step": [50, 1]
-		},
-		"stage2":
-		{
-			"start": [1, 270, 310],
-			"end": [270, 310, 513],
-			"step": [5, 1, 5]
-		},
-		"stage3":
-		{
-			"start": [1, 220, 280],
-			"end": [220, 280, 514],
-			"step": [5, 1, 5]
-		},
-		"stage4":
-		{
-			"start": [1, 210, 270],
-			"end": [210, 270, 513],
-			"step": [5, 1, 5]
-		},
-		"stage5":
-		{
-			"start": [1, 150, 300],
-			"end": [150, 300, 2067],
-			"step": [5, 1, 5]
+			"start": [1, 1600, 1900],
+			"end": [1600, 1900, 4339],
+			"step": [50, 1, 50]
 		}
 	},
 	"data_type": "individual",
