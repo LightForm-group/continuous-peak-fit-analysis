@@ -60,14 +60,19 @@ def extract_intensity_input(config_path: str):
     start = config["image_numbers"]["start"]
     end = config["image_numbers"]["end"]
     step = config["image_numbers"]["step"]
-    print("The start is: ", start, "The end is ", end, "The step is ", step, sep='\n', end='\n\n')
-
-    if config_path == "yaml/config_diamond_2021.yaml":
-        # number and spacing of files
-        image_numbers = np.r_[2:42+1, 45:85+1, 88:128+1, 131:171+1, 174:214+1, 217:257+1, 260:300+1, 303:343+1, 346:386+1]
-    else:    
-        # number and spacing of files
-        image_numbers = get_image_numbers(start, end, step)
+    print("The start numbers are: ", start, "The end numbers are: ", end, "The steps are: ", step, sep='\n', end='\n\n')
+    
+    # number and spacing of files
+    image_numbers = []
+    for i in range(len(start)):
+        image_numbers.append(get_image_numbers(start[i],end[i],step[i]))
+        
+#     if config_path == "yaml/config_diamond_2021.yaml":
+#         # number and spacing of files
+#         image_numbers = np.r_[2:42+1, 45:85+1, 88:128+1, 131:171+1, 174:214+1, 217:257+1, 260:300+1, 303:343+1, 346:386+1]
+#     else:    
+#         # number and spacing of files
+#         image_numbers = get_image_numbers(start, end, step)
     
     return experiment_number, input_fit_path, peak_label, data_resolution, image_numbers
 
@@ -129,7 +134,12 @@ def extract_combine_intensity_input(config_path: str):
     print("The start is: ", start_combine, "The end is: ", end_combine, "The step is: ", step_combine, sep='\n', end='\n\n')
 
     # number and spacing of files
-    image_numbers_combine = get_image_numbers(start_combine, end_combine, step_combine)
+    combine_image_numbers = []
+    for i in range(len(start)):
+        combine_image_numbers.append(analysis.get_image_numbers(start_combine[i],end_combine[i],step_combine[i]))
+    
+#     # number and spacing of files
+#     image_numbers_combine = get_image_numbers(start_combine, end_combine, step_combine)
     
     return input_text_path_combine, output_text_path_combine, intensity_type, experiment_numbers_combine, image_numbers_combine
 
@@ -170,12 +180,17 @@ def extract_powder_intensity_input(config_path: str):
     print("The start is: ", powder_start, "The end is: ", powder_end, "The step is: ", powder_step, sep='\n', end='\n\n')
 
     # number and spacing of files
-    powder_image_numbers = get_image_numbers(powder_start, powder_end, powder_step)
+    powder_image_numbers = []
+    for i in range(len(start)):
+        powder_image_numbers.append(analysis.get_image_numbers(powder_start[i],powder_end[i],powder_step[i]))
+    
+#     # number and spacing of files
+#     powder_image_numbers = get_image_numbers(powder_start, powder_end, powder_step)
     
     return powder_experiment_number, powder_input_fit_path, powder_peak_label, powder_data_resolution, powder_image_numbers
 
 def read_fit_results (experiment_number: int, input_fit_path: str, peak_label: list, 
-                      data_resolution:int, image_numbers = List[int]):
+                      data_resolution:int, image_numbers: List[int]):
     """This function loops through refined '.fit' files produced using
     the python package Continuous-Peak-Fit and searches for the peak position, 
     intensity, half-width and Pseudo-Voigt weighting results. 
@@ -195,38 +210,41 @@ def read_fit_results (experiment_number: int, input_fit_path: str, peak_label: l
     peak_halfwidth = dict()
     peak_PV_weight = dict()
     
-    for image_number in tqdm(image_numbers):
-        input_fit_file = input_fit_path.format(experiment_number=experiment_number, image_number=image_number)
-        
-        # dictionary to save results to
-        peak_position[image_number] = dict()
-        peak_intensity[image_number] = dict()
-        peak_halfwidth[image_number] = dict()
-        peak_PV_weight[image_number] = dict()
-        
-        with open(input_fit_file, 'r') as results_file:  
-            line = results_file.readline()
-            peak_number = 0
-            
-            while line:
-                if '# peak number' in line:
-                    peak_position[image_number][peak_label[peak_number]]=[]
-                    peak_intensity[image_number][peak_label[peak_number]]=[]
-                    peak_halfwidth[image_number][peak_label[peak_number]]=[]
-                    peak_PV_weight[image_number][peak_label[peak_number]]=[]
+    # iterate through different blocks of image numbers
+    for i in range(len(image_numbers)):
 
-                    for azimuth_degree in range (0, 360, data_resolution):
+        for image_number in tqdm(image_numbers[i]):
+            input_fit_file = input_fit_path.format(experiment_number=experiment_number, image_number=image_number)
+
+            # dictionary to save results to
+            peak_position[image_number] = dict()
+            peak_intensity[image_number] = dict()
+            peak_halfwidth[image_number] = dict()
+            peak_PV_weight[image_number] = dict()
+
+            with open(input_fit_file, 'r') as results_file:  
+                line = results_file.readline()
+                peak_number = 0
+
+                while line:
+                    if '# peak number' in line:
+                        peak_position[image_number][peak_label[peak_number]]=[]
+                        peak_intensity[image_number][peak_label[peak_number]]=[]
+                        peak_halfwidth[image_number][peak_label[peak_number]]=[]
+                        peak_PV_weight[image_number][peak_label[peak_number]]=[]
+
+                        for azimuth_degree in range (0, 360, data_resolution):
+                            line = results_file.readline()
+                            fit_result = re.findall(r"[-+]?\d*\.\d+|\d+", line)
+                            peak_position[image_number][peak_label[peak_number]].append(float(fit_result[0]))
+                            peak_intensity[image_number][peak_label[peak_number]].append(float(fit_result[1]))
+                            peak_halfwidth[image_number][peak_label[peak_number]].append(float(fit_result[2]))
+                            peak_PV_weight[image_number][peak_label[peak_number]].append(float(fit_result[3]))
+
+                        peak_number+=1
+
+                    else:
                         line = results_file.readline()
-                        fit_result = re.findall(r"[-+]?\d*\.\d+|\d+", line)
-                        peak_position[image_number][peak_label[peak_number]].append(float(fit_result[0]))
-                        peak_intensity[image_number][peak_label[peak_number]].append(float(fit_result[1]))
-                        peak_halfwidth[image_number][peak_label[peak_number]].append(float(fit_result[2]))
-                        peak_PV_weight[image_number][peak_label[peak_number]].append(float(fit_result[3]))
-
-                    peak_number+=1
-
-                else:
-                    line = results_file.readline()
 
     return peak_position, peak_intensity, peak_halfwidth, peak_PV_weight
 
@@ -256,85 +274,88 @@ def intensity_to_texture_file(experiment_number: int, intensity_type: str, outpu
     """
     count = 0
     
-    for image_number in tqdm(image_numbers):
-    
-        for label in peak_label:
-            output_path =  output_text_path.format(experiment_number=experiment_number, intensity_type=intensity_type, image_number=image_number, label=label)
-            output_folder = pathlib.Path(output_path).parent
-            output_folder.mkdir(exist_ok=True)
+    # iterate through different blocks of image numbers
+    for i in range(len(image_numbers)):
 
-            with open(output_path, 'w') as output_file:
+        for image_number in tqdm(image_numbers[i]):
 
-                # write metadata for the top of the file
-                output_file.write('Polar Angle \t Azimuth Angle \t Intensity \n')
+            for label in peak_label:
+                output_path =  output_text_path.format(experiment_number=experiment_number, intensity_type=intensity_type, image_number=image_number, label=label)
+                output_folder = pathlib.Path(output_path).parent
+                output_folder.mkdir(exist_ok=True)
 
-                # iterate through the peak intensities
-                for i in range(0, len(peak_intensity[image_number][label])):
+                with open(output_path, 'w') as output_file:
 
-                    # set the angle around the circle (diffraction pattern ring) from horizontal position
-                    alpha = i*data_resolution
+                    # write metadata for the top of the file
+                    output_file.write('Polar Angle \t Azimuth Angle \t Intensity \n')
 
-                    # set the inclination of any inclined planes to 45 degrees
-                    beta = (np.pi)/4
+                    # iterate through the peak intensities
+                    for i in range(0, len(peak_intensity[image_number][label])):
 
-                    # use the circle parametrisation formula to calculate x,y,z values
-                    if plane == 'XY':
-                        x = np.cos(np.deg2rad(alpha))
-                        y = np.sin(np.deg2rad(alpha))
-                        z = 0
+                        # set the angle around the circle (diffraction pattern ring) from horizontal position
+                        alpha = i*data_resolution
 
-                    if plane == 'XZ':
-                        x = np.cos(np.deg2rad(alpha))
-                        y = 0
-                        z = np.sin(np.deg2rad(alpha))
+                        # set the inclination of any inclined planes to 45 degrees
+                        beta = (np.pi)/4
 
-                    if plane == 'YZ':
-                        x = 0
-                        y = np.cos(np.deg2rad(alpha))
-                        z = np.sin(np.deg2rad(alpha))
-                        
-                    if plane == 'YX':
-                        x = np.sin(np.deg2rad(alpha))
-                        y = np.cos(np.deg2rad(alpha))
-                        z = 0
+                        # use the circle parametrisation formula to calculate x,y,z values
+                        if plane == 'XY':
+                            x = np.cos(np.deg2rad(alpha))
+                            y = np.sin(np.deg2rad(alpha))
+                            z = 0
 
-                    if plane == 'ZX':
-                        x = np.sin(np.deg2rad(alpha))
-                        y = 0
-                        z = np.cos(np.deg2rad(alpha))
+                        if plane == 'XZ':
+                            x = np.cos(np.deg2rad(alpha))
+                            y = 0
+                            z = np.sin(np.deg2rad(alpha))
 
-                    if plane == 'ZY':
-                        x = 0
-                        y = np.sin(np.deg2rad(alpha))
-                        z = np.cos(np.deg2rad(alpha))
+                        if plane == 'YZ':
+                            x = 0
+                            y = np.cos(np.deg2rad(alpha))
+                            z = np.sin(np.deg2rad(alpha))
 
-                    if plane == 'XY to XZ':
-                        x = np.cos(np.deg2rad(alpha))
-                        y = np.sin(np.deg2rad(alpha))*np.cos(beta)
-                        z = np.sin(np.deg2rad(alpha))*np.sin(beta)
+                        if plane == 'YX':
+                            x = np.sin(np.deg2rad(alpha))
+                            y = np.cos(np.deg2rad(alpha))
+                            z = 0
 
-                    if plane == 'YX to YZ':
-                        x = np.sin(np.deg2rad(alpha))*np.cos(beta)
-                        y = np.cos(np.deg2rad(alpha))
-                        z = np.sin(np.deg2rad(alpha))*np.sin(beta)
+                        if plane == 'ZX':
+                            x = np.sin(np.deg2rad(alpha))
+                            y = 0
+                            z = np.cos(np.deg2rad(alpha))
 
-                    if plane == 'XZ to YZ':
-                        x = np.cos(np.deg2rad(alpha))*np.cos(beta)
-                        y = np.cos(np.deg2rad(alpha))*np.sin(beta)
-                        z = np.sin(np.deg2rad(alpha))
+                        if plane == 'ZY':
+                            x = 0
+                            y = np.sin(np.deg2rad(alpha))
+                            z = np.cos(np.deg2rad(alpha))
 
-                    # calulate the spherical polar coordinates from cartesian coordinates using the standard equations
-                    theta = np.rad2deg(np.arccos(z))
-                    # arctan2 needed to handle negative values for phi values
-                    phi = np.rad2deg(np.arctan2(y,x))
-                    # convert phi scale from -180, 180 to 0, 360
-                    if phi < 0:
-                        phi = phi + 360
+                        if plane == 'XY to XZ':
+                            x = np.cos(np.deg2rad(alpha))
+                            y = np.sin(np.deg2rad(alpha))*np.cos(beta)
+                            z = np.sin(np.deg2rad(alpha))*np.sin(beta)
 
-                    output_file.write(f'{theta}\t'
-                                      f'{phi}\t'
-                                      f'{peak_intensity[image_number][label][i]}\n')
-        count+=1
+                        if plane == 'YX to YZ':
+                            x = np.sin(np.deg2rad(alpha))*np.cos(beta)
+                            y = np.cos(np.deg2rad(alpha))
+                            z = np.sin(np.deg2rad(alpha))*np.sin(beta)
+
+                        if plane == 'XZ to YZ':
+                            x = np.cos(np.deg2rad(alpha))*np.cos(beta)
+                            y = np.cos(np.deg2rad(alpha))*np.sin(beta)
+                            z = np.sin(np.deg2rad(alpha))
+
+                        # calulate the spherical polar coordinates from cartesian coordinates using the standard equations
+                        theta = np.rad2deg(np.arccos(z))
+                        # arctan2 needed to handle negative values for phi values
+                        phi = np.rad2deg(np.arctan2(y,x))
+                        # convert phi scale from -180, 180 to 0, 360
+                        if phi < 0:
+                            phi = phi + 360
+
+                        output_file.write(f'{theta}\t'
+                                          f'{phi}\t'
+                                          f'{peak_intensity[image_number][label][i]}\n')
+            count+=1
         
     print(f"Written '{count}' set of {intensity_type} intensity .txt data files to: '{output_path}'.")
             
@@ -355,33 +376,36 @@ def combine_texture_files (input_text_path: str, output_text_path: str, intensit
     experiment_start = experiment_numbers[0]
     experiment_end = experiment_numbers[-1]
 
-    for image_number in image_numbers:
-    
-        for label in tqdm(peak_label):
-            output_path = output_text_path.format(experiment_start=experiment_start, experiment_end=experiment_end, intensity_type=intensity_type, image_number=image_number, label=label)
-            output_folder = pathlib.Path(output_path).parent
-            output_folder.mkdir(exist_ok=True)
-            # overwrite any existing output file
+    # iterate through different blocks of image numbers
+    for i in range(len(image_numbers)):
+        
+        for image_number in image_numbers[i]:
 
-            with open(output_path, 'w') as output_file:
-                # write metadata for the top of the file
-                output_file.write('Polar Angle \t Azimuth Angle \t Intensity \n')
+            for label in tqdm(peak_label):
+                output_path = output_text_path.format(experiment_start=experiment_start, experiment_end=experiment_end, intensity_type=intensity_type, image_number=image_number, label=label)
+                output_folder = pathlib.Path(output_path).parent
+                output_folder.mkdir(exist_ok=True)
+                # overwrite any existing output file
 
-            for experiment_number in experiment_numbers:
-                input_path = input_text_path.format(experiment_number=experiment_number, intensity_type=intensity_type, image_number=image_number, label=label)
+                with open(output_path, 'w') as output_file:
+                    # write metadata for the top of the file
+                    output_file.write('Polar Angle \t Azimuth Angle \t Intensity \n')
 
-                # open output file in append mode to add lines
-                with open(output_path, 'a') as output_file:
+                for experiment_number in experiment_numbers:
+                    input_path = input_text_path.format(experiment_number=experiment_number, intensity_type=intensity_type, image_number=image_number, label=label)
 
-                    with open(input_path, 'r') as results_file:  
-                        line = results_file.readline()
-                        line = results_file.readline()
+                    # open output file in append mode to add lines
+                    with open(output_path, 'a') as output_file:
 
-                        while line:
-                            output_file.write(line)
+                        with open(input_path, 'r') as results_file:  
+                            line = results_file.readline()
                             line = results_file.readline()
 
-            print(f"Written {intensity_type} intensity data for '...{input_path[-24:]}' to: '...{output_path[-35:]}'.")
+                            while line:
+                                output_file.write(line)
+                                line = results_file.readline()
+
+                print(f"Written {intensity_type} intensity data for '...{input_path[-24:]}' to: '...{output_path[-35:]}'.")
         
 def calibrate_intensity_to_powder(peak_intensity: dict, powder_peak_intensity: dict,
                                   powder_peak_label: List[str], image_numbers: List[int], powder_start: int = 1):
@@ -389,21 +413,24 @@ def calibrate_intensity_to_powder(peak_intensity: dict, powder_peak_intensity: d
     corrected_peak_intensity = dict()
     first_iteration = True
 
-    for image_number in tqdm(image_numbers):
-        corrected_peak_intensity[image_number] = dict()
+        # iterate through different blocks of image numbers
+    for i in range(len(image_numbers)):
+        
+        for image_number in tqdm(image_numbers[i]):
+            corrected_peak_intensity[image_number] = dict()
 
-        for label in powder_peak_label:
-            powder_average = np.average(powder_peak_intensity[powder_start][label])
-            powder_error = np.std(powder_peak_intensity[powder_start][label], ddof=1)
+            for label in powder_peak_label:
+                powder_average = np.average(powder_peak_intensity[powder_start][label])
+                powder_error = np.std(powder_peak_intensity[powder_start][label], ddof=1)
 
-            corrected_peak_intensity[image_number][label] = []                            
-            corrected_peak_intensity[image_number][label] = peak_intensity[image_number][label] / powder_average
+                corrected_peak_intensity[image_number][label] = []                            
+                corrected_peak_intensity[image_number][label] = peak_intensity[image_number][label] / powder_average
 
-            if first_iteration:
-                print(f"Normalised {label} intensities by a value of {powder_average} +/- {powder_error} from average powder intensity.")
-            else:
-                continue
-     
-        first_iteration = False
+                if first_iteration:
+                    print(f"Normalised {label} intensities by a value of {powder_average} +/- {powder_error} from average powder intensity.")
+                else:
+                    continue
+
+            first_iteration = False
             
     return corrected_peak_intensity

@@ -14,8 +14,10 @@
 % intensity data files, and then asked to select an output folder, to save
 % the ODFs, PFs and a text file containing the texture strength values.
 
-user_inputs_filepath = 'json/diamond/config_diamond_2021_summed_beta.json'
-%user_inputs_filepath = 'json/desy/config_desy_2021_alpha_05.json'
+%user_inputs_filepath = 'json/diamond/config_diamond_2021_summed_alpha.json'
+%user_inputs_filepath = 'json/diamond/config_diamond_2017_beta.json'
+%user_inputs_filepath = 'json/desy/config_desy_2021_alpha_10.json'
+user_inputs_filepath = 'json/desy/config_desy_2020_beta_07b.json'
 
 %% Load user inputs from JSON file
 
