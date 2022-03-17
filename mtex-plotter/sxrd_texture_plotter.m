@@ -17,7 +17,7 @@
 %user_inputs_filepath = 'json/diamond/config_diamond_2021_summed_alpha.json'
 %user_inputs_filepath = 'json/diamond/config_diamond_2017_beta.json'
 %user_inputs_filepath = 'json/desy/config_desy_2021_alpha_10.json'
-user_inputs_filepath = 'json/desy/config_desy_2020_beta_07b.json'
+user_inputs_filepath = 'json/desy/config_desy_2020_beta_10.json'
 
 %% Load user inputs from JSON file
 
