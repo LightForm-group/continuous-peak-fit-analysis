@@ -64,8 +64,10 @@ def extract_intensity_input(config_path: str):
     
     # number and spacing of files
     image_numbers = []
+    image_numbers_sorted = []
     for i in range(len(start)):
         image_numbers.append(get_image_numbers(start[i],end[i],step[i]))
+        image_numbers_sorted.extend(get_image_numbers(start[i],end[i],step[i]))
         
 #     if config_path == "yaml/config_diamond_2021.yaml":
 #         # number and spacing of files
@@ -74,7 +76,7 @@ def extract_intensity_input(config_path: str):
 #         # number and spacing of files
 #         image_numbers = get_image_numbers(start, end, step)
     
-    return experiment_number, input_fit_path, peak_label, data_resolution, image_numbers
+    return experiment_number, input_fit_path, peak_label, data_resolution, image_numbers, image_numbers_sorted
 
 def extract_writing_intensity_input(config_path: str):
     """Extract user inputs from yaml configuration file. 
@@ -134,9 +136,9 @@ def extract_combine_intensity_input(config_path: str):
     print("The start is: ", start_combine, "The end is: ", end_combine, "The step is: ", step_combine, sep='\n', end='\n\n')
 
     # number and spacing of files
-    combine_image_numbers = []
+    image_numbers_combine = []
     for i in range(len(start)):
-        combine_image_numbers.append(analysis.get_image_numbers(start_combine[i],end_combine[i],step_combine[i]))
+        image_numbers_combine.append(get_image_numbers(start_combine[i],end_combine[i],step_combine[i]))
     
 #     # number and spacing of files
 #     image_numbers_combine = get_image_numbers(start_combine, end_combine, step_combine)
@@ -182,7 +184,7 @@ def extract_powder_intensity_input(config_path: str):
     # number and spacing of files
     powder_image_numbers = []
     for i in range(len(start)):
-        powder_image_numbers.append(analysis.get_image_numbers(powder_start[i],powder_end[i],powder_step[i]))
+        powder_image_numbers.append(get_image_numbers(powder_start[i],powder_end[i],powder_step[i]))
     
 #     # number and spacing of files
 #     powder_image_numbers = get_image_numbers(powder_start, powder_end, powder_step)
