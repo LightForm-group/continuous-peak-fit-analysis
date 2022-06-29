@@ -1,0 +1,84 @@
+image_numbers:
+    start: 
+        - 1
+        - 800
+        - 1300
+    end: 
+        - 800
+        - 1300
+        - 6000
+    step: 
+        - 50
+        - 1
+        - 50
+# start, end and step defining the image numbers of diffraction patterns to analyse
+    
+file_paths:
+    input_fit_path: ../../../SXRD_analysis/diamond_2022/{experiment_number:03d}_Ti64_TIFUN-T5_TD_Deform_950C_1mms-1/fourier-peak-analysis/pilatus_{image_number:05d}.fit
+# input path of the results .fit file, excluding the experiment number and image number
+    
+    output_text_path: ../../../SXRD_analysis/diamond_2022/{experiment_number:03d}_Ti64_TIFUN-T5_TD_Deform_950C_1mms-1/fourier-peak-analysis-texture/{experiment_number:03d}-{intensity_type}-intensities/{experiment_number:03d}_{image_number:05d}_peak_intensity_{label}.txt
+# output path for the texture text file, excluding the experiment number, intensity type, image number and lattice plane peak label.
+    
+user_inputs: 
+    experiment_number: 11
+# experiment number of the test
+    
+    data_resolution: 1
+# azimuthal data resolution of the intensity in degrees, usually output as 1 degree from Continuous_Peak_Fit.
+    
+    sample_orientation: S3
+# sample orientation from options S1, S2, S3, S4, S5, S6, directly related to the Cartesian alignment of 'YZ', 'XZ', 'XY', 'YX to YZ', 'XY to XZ', 'XZ to YZ'.
+# rotated sample orientation from options S1R, S2R, S3R, directly related to the Cartesian alignment of 'ZY', 'ZX', 'YX'. 
+    
+    peak_label:
+        - "10-10"
+        - "0002"
+        - "110"
+        - "10-11"
+        - "10-12"
+        - "200"
+        - "11-20"
+        - "10-13"
+        - "20-20"
+        - "11-22"
+        - "20-21"
+        - "0004"
+        - "220"
+        - "20-22"
+        - "10-14"
+        - "310"
+        - "20-23"
+# list of the lattice plane peak labels contained in the .fit files.
+    
+    peak_label_default:
+        - "10-10"
+        - "0002"
+        - "110"
+        - "10-11"
+        - "10-12"
+        - "200"
+        - "11-20"
+        - "10-13"
+        - "211"
+        - "20-20"
+        - "11-22"
+        - "20-21"
+        - "0004"
+        - "220"
+        - "20-22"
+        - "10-14"
+        - "310"
+        - "20-23"
+        - "21-30"
+        - "21-31"
+        - "222"
+        - "11-24"
+        - "21-32"
+        - "10-15"
+        - "20-24"
+        - "321"
+        - "30-30"
+        - "30-31"
+        - "21-33"
+# default list of the lattice plane peak labels that could be contained in the .fit files for ideal diffraction pattern (including difficult to fit peaks that might overlap).   

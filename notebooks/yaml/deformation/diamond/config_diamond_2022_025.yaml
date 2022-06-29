@@ -1,0 +1,56 @@
+deformation_input:
+# include inputs for analysing deformation behaviour here...
+
+    thermomechanical_equipment: ETMT
+# input the equipment, either ETMT or Dilatometer.
+
+    thermomechanical_file_path: ../../../SXRD_analysis/diamond_2022/025_Ti64_TIFUN-T5_TD_Deform_950C_0.1mms-1/ETMT-output/ETMT_output_025.txt
+# input path for the thermomechanical data.
+
+    start_deformation_initial: 1000
+# start number defining image numbers covering diffraction patterns during deformation.
+
+    end_deformation_initial: 3000
+# end number defining image numbers covering diffraction patterns during deformation.
+
+    start_deformation: 1242
+# start number defining image number at exact start of deformation.
+
+    end_deformation: 2742
+# end number defining image number at exact end of deformation.
+
+    acquisition_frequency_sxrd: 100
+# acquistion frequency of the synchrotron x-ray diffraction pattern images in Hz during deformation. Note, use spacing between images, rather than actual collection time.
+
+    minimum_stress: 1.0
+# define a minimum stress in MPa for detecting the start of deformation, default is 1 MPa.
+
+    deform_sequence: 1
+# define a sequence length for detecting the start of deformation, default is 4.
+
+    beam_energy: 89.564
+# beam energy in keV.
+
+    azimuth_load_direction: 90
+# give the azimuthal angle in degrees for the loading direction, note 0 degrees is horizontal, 90 degrees is vertical.
+
+    filter_equipment: 21
+# define a median filter for smoothing any noise in the equipment data, no filtering is 1.
+
+    filter_sxrd: 21
+# define a median filter for smoothing any noise in the sxrd data, no filtering is 1.
+
+    output_file_path: ../../../SXRD_results/diamond_2022/experiment_{experiment_number:03d}/fourier-peak-analysis-deformation
+# output path for saving deformation analysis, excluding the experiment number.
+
+    analogue_data_file_path: 
+# input path for analogue output, used to correlate diffraction pattern images with deformation, not always possible.
+
+    load_conversion:
+# conversion of analogue signal to load (N/V).
+
+    temperature_conversion:
+# conversion of analogue signal to load (C/V).
+
+    position_conversion: 
+# conversion of analogue signal to load (mm/V). 

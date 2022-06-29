@@ -38,7 +38,7 @@ def extract_sxrd_input(config_path: str):
     print("The beam energy (in keV) is:", beam_energy, sep='\n', end='\n\n')
     
     azimuth_load_direction = config["deformation_input"]["azimuth_load_direction"]
-    print("The load direction along the azimuthal angle (in degrees) is:", beam_energy, sep='\n', end='\n\n')
+    print("The load direction along the azimuthal angle (in degrees) is:", azimuth_load_direction, sep='\n', end='\n\n')
     
     filter_sxrd = config["deformation_input"]["filter_sxrd"]
     print("A median filter is being applied to the SXRD data, with a value of:", filter_sxrd, sep='\n', end='\n\n')
@@ -158,7 +158,7 @@ def relative_amplitude(amplitude: np.ndarray) -> np.ndarray:
     
     return relative_amplitude
 
-def find_start_end_microstrain(start_number: int, end_number: int, image_numbers: list, peak_label: list, peak_position_time: dict, plane_colour: dict, plane_marker: dict):
+def find_start_end_microstrain(start_number: int, end_number: int, image_numbers: list, peak_position_time: dict, peak_label: list, azimuth_load_direction: int, plane_colour: dict, plane_marker: dict):
 
     # match the start and end numbers to values and indices in the arrays
     start_value, start_index, end_value, end_index = deformation.match_array_numbers(image_numbers, start_number, end_number)
@@ -169,7 +169,7 @@ def find_start_end_microstrain(start_number: int, end_number: int, image_numbers
     plt.figure(figsize=(10,8))
     plt.minorticks_on()
     for peak in peak_label:
-        peak_position_time_array = np.array(peak_position_time[peak][0])
+        peak_position_time_array = np.array(peak_position_time[peak][azimuth_load_direction])
         microstrain = calc_strain(peak_position_time_array[start_index:end_index])*1e6
         plt.plot(image_numbers[start_index:end_index], microstrain, marker=plane_marker[peak], 
                  color=plane_colour[peak], markersize=1, label=peak)
@@ -212,34 +212,433 @@ def follow_azimuth_angle(peak_position, image_numbers, start_number, end_number,
     # match the start and end numbers to values and indices in the arrays
     start_value, start_index, end_value, end_index = deformation.match_array_numbers(image_numbers, start_number, end_number)
     
-    # plot the variation in the azimuthal angle of the maximum position of the ring
-    plt.figure(figsize=(10,8))
-    plt.minorticks_on()
-    print("Variation of azimuthal angle of the maximum position of the ring:")
+    # plot the variation in the azimuthal angle of the maximum and minimum position of the ring
+    print("Variation of azimuthal angle of the MAXIMUM and MINIMUM position of the ring:")
+    fig,((ax1),(ax2)) = plt.subplots(2, 1, figsize=(20,10))
+
     for peak in peak_label:
-        plt.plot(image_numbers[start_index:end_index], max_azimuth[peak][start_index:end_index], marker=plane_marker[peak], color=plane_colour[peak], markersize=1, label=peak)
-        plt.legend(fontsize = 20)
-        plt.ylabel(r"Azimuthal Angle, ${\nu}$ ${(^\circ C)}$", fontsize = 20)
-        plt.xlabel("Image Number", fontsize = 20)
+        ax1.plot(image_numbers[start_index:end_index], max_azimuth[peak][start_index:end_index], marker=plane_marker[peak], color=plane_colour[peak], markersize=1, label=peak)
+        ax1.set_xlabel("Image Number", fontsize = 20)
+        ax1.set_ylabel(r"Azimuthal Angle, ${\nu}$ ${(^\circ C)}$", fontsize = 20)
+        ax1.legend(fontsize = 20)
+        ax1.set_title(r"Maximum ${2 \theta}$ / Minimum d-spacing", fontsize = 20)
+
+        ax2.plot(image_numbers[start_index:end_index], min_azimuth[peak][start_index:end_index], marker=plane_marker[peak], color=plane_colour[peak], markersize=1, label=peak)
+        ax2.set_xlabel("Image Number", fontsize = 20)
+        ax2.set_ylabel(r"Azimuthal Angle, ${\nu}$ ${(^\circ C)}$", fontsize = 20)
+        ax2.legend(fontsize = 20)
+        ax2.set_title(r"Minimum ${2 \theta}$ / Maximum d-spacing", fontsize = 20)
      
     plt.tight_layout()
     output_folder = output_file_path.format(experiment_number = experiment_number)
-    plt.savefig("{output_folder}/max_azimuth_{experiment_number}.png".format(output_folder = output_folder,  
+    plt.savefig("{output_folder}/max_min_azimuth_{experiment_number}.png".format(output_folder = output_folder,  
                                                                              experiment_number = experiment_number))
     plt.show()
     
-    # plot the variation in the azimuthal angle of the minimum position of the ring
+def plot_microstrain_stress(start_number: int, end_number: int, image_numbers: list,
+                            peak_position_time: dict, true_stress: np.ndarray, 
+                            peak_label: list, azimuth_load_direction: int, plane_marker: dict, plane_colour: dict, 
+                            output_file_path: str, experiment_number: int, filter_data: int = 1,
+                            number_of_points: int = 50, microstrain_limit: float = 0, true_stress_limit: float = 0):
+    
+    """ Plot load, temperature and position data, from instrument data recorded for each diffraction pattern image.
+    The instrument data is in the form of an analogue voltage signal, with a conversion factor used to calculate 
+    the Newtons, Degree Celsius or Millimetre values to plot.
+    
+    :param file_path_instrument_data: input file path string.
+    :param start_deform: value defining the start point of deformation.
+    :param end_deform: value defining the end point of deformation.
+    :param load_conversion: conversion for load in Newton / Volt (default is 25).
+    :param temp_conversion: conversion for temperature in Degree Celsius / Volt (default is 150).
+    :param position_conversion: conversion for position in Millimetres / Volt  (default is 0.5).
+    
+    :return: length of the instrument data (equivalent to the maximum frame).
+    """
+    # set the output folder
+    output_folder = output_file_path.format(experiment_number = experiment_number)
+    
+    # match the start and end numbers to values and indices in the arrays
+    start_value, start_index, end_value, end_index = deformation.match_array_numbers(image_numbers, start_number, end_number)
+    
+    # set number of points to be plotted
+    if number_of_points == 0:
+        number_of_points = end_index - start_index
+    else:
+        number_of_points = number_of_points
+    
+    # set initial limits applied to false
+    limits_applied = False
+    
+    # plot the lattice microstrain variation with applied true stress for four different orthogonal directions
+    print("Lattice microstrain variation with applied true stress for four different orthogonal directions:")
+    
+    fig,((ax1,ax2),(ax3,ax4))=plt.subplots(2, 2, figsize=(20,10))
+
+    for peak in peak_label:
+
+        peak_position_time_array = np.array(peak_position_time[peak][0])
+        microstrain = calc_strain(peak_position_time_array[start_index:end_index])*1e6
+        microstrain = medfilt(microstrain,filter_data)
+        ax1.plot(microstrain[0:number_of_points],true_stress[0:number_of_points],
+                 marker=plane_marker[peak],color=plane_colour[peak],markersize=10,label=peak)
+        ax1.set_xlabel('Microstrain', fontsize=20)
+        ax1.set_ylabel('True Stress, ${\sigma}$, (MPa)', fontsize = 20)
+        ax1.minorticks_on()
+        ax1.legend()
+        ax1.set_title(r'${0^\circ}$', fontsize = 20)
+
+        peak_position_time_array = np.array(peak_position_time[peak][90])
+        microstrain = calc_strain(peak_position_time_array[start_index:end_index])*1e6
+        microstrain = medfilt(microstrain,filter_data)
+        ax2.plot(microstrain[0:number_of_points],true_stress[0:number_of_points],
+                 marker=plane_marker[peak],color=plane_colour[peak],markersize=10,label=peak)
+        ax2.set_xlabel('Microstrain', fontsize=20)
+        ax2.set_ylabel('True Stress, ${\sigma}$, (MPa)', fontsize = 20)
+        ax2.minorticks_on()
+        ax2.legend()
+        ax2.set_title(r'${90^\circ}$', fontsize = 20)
+
+        peak_position_time_array = np.array(peak_position_time[peak][180])
+        microstrain = calc_strain(peak_position_time_array[start_index:end_index])*1e6
+        microstrain = medfilt(microstrain,filter_data)
+        ax3.plot(microstrain[0:number_of_points],true_stress[0:number_of_points],
+                 marker=plane_marker[peak],color=plane_colour[peak],markersize=10,label=peak)
+        ax3.set_xlabel('Microstrain', fontsize=20)
+        ax3.set_ylabel('True Stress, ${\sigma}$, (MPa)', fontsize = 20)
+        ax3.minorticks_on()
+        ax3.legend()
+        ax3.set_title(r'${180^\circ}$', fontsize = 20)
+
+        peak_position_time_array = np.array(peak_position_time[peak][270])
+        microstrain = calc_strain(peak_position_time_array[start_index:end_index])*1e6
+        microstrain = medfilt(microstrain,filter_data)
+        ax4.plot(microstrain[0:number_of_points],true_stress[0:number_of_points],
+                 marker=plane_marker[peak],color=plane_colour[peak],markersize=10,label=peak)
+        ax4.set_xlabel('Microstrain', fontsize=20)
+        ax4.set_ylabel('True Stress, ${\sigma}$, (MPa)', fontsize = 20)
+        ax4.minorticks_on()
+        ax4.legend()
+        ax4.set_title(r'${270^\circ}$', fontsize = 20)
+
+        if microstrain_limit > 0:
+            ax1.set_xlim([0, microstrain_limit])
+            ax2.set_xlim([0, microstrain_limit])
+            ax3.set_xlim([0, microstrain_limit])
+            ax4.set_xlim([0, microstrain_limit])
+            limits_applied = True
+
+        if microstrain_limit < 0 :
+            ax1.set_xlim([microstrain_limit, 0])
+            ax2.set_xlim([microstrain_limit, 0])
+            ax3.set_xlim([microstrain_limit, 0])
+            ax4.set_xlim([microstrain_limit, 0])
+            limits_applied = True
+
+        if true_stress_limit > 0:
+            ax1.set_ylim([0, true_stress_limit])
+            ax2.set_ylim([0, true_stress_limit])
+            ax3.set_ylim([0, true_stress_limit])
+            ax4.set_ylim([0, true_stress_limit])
+            limits_applied = True
+
+        if true_stress_limit < 0 :
+            ax1.set_ylim([true_stress_limit, 0])
+            ax2.set_ylim([true_stress_limit, 0])
+            ax3.set_ylim([true_stress_limit, 0])
+            ax4.set_ylim([true_stress_limit, 0])
+            limits_applied = True
+
+    plt.tight_layout()
+    
+    if limits_applied: 
+        plt.savefig("{output_folder}/microstrain_true_stress_limited_{experiment_number}.png".format(
+                                                                                output_folder = output_folder, 
+                                                                                experiment_number = experiment_number))
+    elif not limits_applied:
+        plt.savefig("{output_folder}/microstrain_true_stress_{experiment_number}.png".format(
+                                                                                output_folder = output_folder, 
+                                                                                experiment_number = experiment_number))
+    plt.show()
+
+    # plot the lattice microstrain variation with applied true stress in the chosen loading direction
+    print(f"Lattice microstrain variation with applied true stress in chosen loading direction, defined at an azimuthal angle of '{azimuth_load_direction}' degrees:", end='\n\n')
+    
+    # create dictionary for saving lattice microstrain
+    microstrain_write = dict()
+    
     plt.figure(figsize=(10,8))
     plt.minorticks_on()
-    print("Variation of azimuthal angle of the minimum position of the ring:")
+    
     for peak in peak_label:
-        plt.plot(image_numbers[start_index:end_index], min_azimuth[peak][start_index:end_index], marker=plane_marker[peak], color=plane_colour[peak], markersize=1, label=peak)
-        plt.legend(fontsize = 20)
-        plt.ylabel(r"Azimuthal Angle, ${\nu}$ ${(^\circ C)}$", fontsize = 20)
-        plt.xlabel("Image Number", fontsize = 20)
-     
-    plt.tight_layout()
-    output_folder = output_file_path.format(experiment_number = experiment_number)
-    plt.savefig("{output_folder}/min_azimuth_{experiment_number}.png".format(output_folder = output_folder,  
-                                                                             experiment_number = experiment_number))
+        
+        peak_position_time_array = np.array(peak_position_time[peak][azimuth_load_direction])
+        microstrain = calc_strain(peak_position_time_array[start_index:end_index])*1e6
+        microstrain = medfilt(microstrain,filter_data)
+        microstrain_write[peak] = microstrain[0:number_of_points]
+        
+        plt.plot(microstrain[0:number_of_points],true_stress[0:number_of_points],
+                 marker=plane_marker[peak],color=plane_colour[peak],markersize=10,label=peak)
+        plt.legend(fontsize=20)
+        plt.xlabel('Microstrain', fontsize = 20)
+        plt.ylabel('True Stress, ${\sigma}$, (MPa)', fontsize = 20)
+        plt.tight_layout()
+        
+        if microstrain_limit > 0:
+            plt.xlim([0, microstrain_limit])
+            limits_applied = True
+            
+        if microstrain_limit < 0 :
+            plt.xlim([microstrain_limit, 0])
+            limits_applied = True
+            
+        if true_stress_limit > 0:
+            plt.ylim([0, true_stress_limit])
+            limits_applied = True
+            
+        if true_stress_limit < 0 :
+            plt.ylim([true_stress_limit, 0])
+            limits_applied = True
+        
+    if limits_applied:
+        plt.savefig("{output_folder}/microstrain_true_stress_load_direction_limited_{experiment_number}.png".format(
+                                                                                 output_folder = output_folder,  
+                                                                                 experiment_number = experiment_number))
+    elif not limits_applied:
+        plt.savefig("{output_folder}/microstrain_true_stress_load_direction_{experiment_number}.png".format(
+                                                                                 output_folder = output_folder,  
+                                                                                 experiment_number = experiment_number))
     plt.show()
+    
+    # define the true stress for writing out
+    true_stress_write = true_stress[0:number_of_points]
+    
+    # open a file to save the microstrain measurements
+    output_text_path =  "{output_folder}/microstrain_true_stress_load_direction_{experiment_number}.txt".format(
+                                                                             output_folder = output_folder,  
+                                                                             experiment_number = experiment_number)
+    output_text_folder = pathlib.Path(output_text_path).parent
+    output_text_folder.mkdir(exist_ok=True)
+
+    with open(output_text_path, 'w') as output_file:
+        
+        output_file.write(f"True Stress \t")
+        
+        for peak in peak_label:
+            # write lattice plane peak labels at top of file
+            output_file.write(f"{peak} Microstrain \t")
+        
+        output_file.write(f"\n")
+        
+        # write true stress and microstrain values
+        for i in range(len(true_stress_write)):
+            output_file.write(f"{true_stress_write[i]}\t")
+            for peak in peak_label:
+                output_file.write(f"{microstrain_write[peak][i]}\t")
+            output_file.write(f"\n")
+            
+    number_of_peaks = len(peak_label)        
+    print(f"The lattice microstrain for '{number_of_peaks}' peaks has been saved to a .txt file: '{output_text_path}'.")
+    
+def plot_microstrain_strain(start_number: int, end_number: int, image_numbers: list,
+                            peak_position_time: dict, true_strain: np.ndarray, 
+                            peak_label: list, azimuth_load_direction: int, plane_marker: dict, plane_colour: dict, 
+                            output_file_path: str, experiment_number: int, filter_data: int = 1,
+                            number_of_points: int = 0, microstrain_limit: float = 0, true_strain_limit: float = 0):
+    
+    """ Plot load, temperature and position data, from instrument data recorded for each diffraction pattern image.
+    The instrument data is in the form of an analogue voltage signal, with a conversion factor used to calculate 
+    the Newtons, Degree Celsius or Millimetre values to plot.
+    
+    :param file_path_instrument_data: input file path string.
+    :param start_deform: value defining the start point of deformation.
+    :param end_deform: value defining the end point of deformation.
+    :param load_conversion: conversion for load in Newton / Volt (default is 25).
+    :param temp_conversion: conversion for temperature in Degree Celsius / Volt (default is 150).
+    :param position_conversion: conversion for position in Millimetres / Volt  (default is 0.5).
+    
+    :return: length of the instrument data (equivalent to the maximum frame).
+    """
+    # set the output folder
+    output_folder = output_file_path.format(experiment_number = experiment_number)
+    
+    # match the start and end numbers to values and indices in the arrays
+    start_value, start_index, end_value, end_index = deformation.match_array_numbers(image_numbers, start_number, end_number)
+    
+    # set number of points to be plotted
+    if number_of_points == 0:
+        number_of_points = end_index - start_index
+    else:
+        number_of_points = number_of_points
+        
+    # set initial limits applied to false
+    limits_applied = False
+    
+    # plot the lattice microstrain variation with applied true strain for four different orthogonal directions
+    print("Lattice microstrain variation with applied true strain for four different orthogonal directions:")
+
+    fig,((ax1,ax2),(ax3,ax4))=plt.subplots(2, 2, figsize=(20,10))
+
+    for peak in peak_label:
+
+        peak_position_time_array = np.array(peak_position_time[peak][0])
+        microstrain = calc_strain(peak_position_time_array[start_index:end_index])*1e6
+        microstrain = medfilt(microstrain,filter_data)
+        ax1.plot(true_strain[0:number_of_points],microstrain[0:number_of_points],
+                 marker=plane_marker[peak],color=plane_colour[peak],markersize=10,label=peak)
+        ax1.set_xlabel('True Strain, ${\epsilon}$, (MPa)', fontsize = 20)
+        ax1.set_ylabel('Microstrain', fontsize=20)
+        ax1.minorticks_on()
+        ax1.legend()
+        ax1.set_title(r'${0^\circ}$', fontsize = 20)
+
+        peak_position_time_array = np.array(peak_position_time[peak][90])
+        microstrain = calc_strain(peak_position_time_array[start_index:end_index])*1e6
+        microstrain = medfilt(microstrain,filter_data)
+        ax2.plot(true_strain[0:number_of_points],microstrain[0:number_of_points],
+                 marker=plane_marker[peak],color=plane_colour[peak],markersize=10,label=peak)
+        ax2.set_xlabel('True Strain, ${\epsilon}$, (MPa)', fontsize = 20)
+        ax2.set_ylabel('Microstrain', fontsize=20)
+        ax2.minorticks_on()
+        ax2.legend()
+        ax2.set_title(r'${90^\circ}$', fontsize = 20)
+
+        peak_position_time_array = np.array(peak_position_time[peak][180])
+        microstrain = calc_strain(peak_position_time_array[start_index:end_index])*1e6
+        microstrain = medfilt(microstrain,filter_data)
+        ax3.plot(true_strain[0:number_of_points],microstrain[0:number_of_points],
+                 marker=plane_marker[peak],color=plane_colour[peak],markersize=10,label=peak)
+        ax3.set_xlabel('True Strain, ${\epsilon}$, (MPa)', fontsize = 20)
+        ax3.set_ylabel('Microstrain', fontsize=20)
+        ax3.minorticks_on()
+        ax3.legend()
+        ax3.set_title(r'${180^\circ}$', fontsize = 20)
+
+        peak_position_time_array = np.array(peak_position_time[peak][270])
+        microstrain = calc_strain(peak_position_time_array[start_index:end_index])*1e6
+        microstrain = medfilt(microstrain,filter_data)
+        ax4.plot(true_strain[0:number_of_points],microstrain[0:number_of_points],
+                 marker=plane_marker[peak],color=plane_colour[peak],markersize=10,label=peak)
+        ax4.set_xlabel('True Strain, ${\epsilon}$, (MPa)', fontsize = 20)
+        ax4.set_ylabel('Microstrain', fontsize=20)
+        ax4.minorticks_on()
+        ax4.legend()
+        ax4.set_title(r'${270^\circ}$', fontsize = 20)
+
+        if true_strain_limit > 0:
+            ax1.set_xlim([0, true_strain_limit])
+            ax2.set_xlim([0, true_strain_limit])
+            ax3.set_xlim([0, true_strain_limit])
+            ax4.set_xlim([0, true_strain_limit])
+            limits_applied = True
+
+        if true_strain_limit < 0 :
+            ax1.set_xlim([true_strain_limit, 0])
+            ax2.set_xlim([true_strain_limit, 0])
+            ax3.set_xlim([true_strain_limit, 0])
+            ax4.set_xlim([true_strain_limit, 0])
+            limits_applied = True
+        
+        if microstrain_limit > 0:
+            ax1.set_ylim([0, microstrain_limit])
+            ax2.set_ylim([0, microstrain_limit])
+            ax3.set_ylim([0, microstrain_limit])
+            ax4.set_ylim([0, microstrain_limit])
+            limits_applied = True
+
+        if microstrain_limit < 0 :
+            ax1.set_ylim([microstrain_limit, 0])
+            ax2.set_ylim([microstrain_limit, 0])
+            ax3.set_ylim([microstrain_limit, 0])
+            ax4.set_ylim([microstrain_limit, 0])
+            limits_applied = True
+
+    plt.tight_layout()
+    
+    if limits_applied: 
+        plt.savefig("{output_folder}/true_strain_microstrain_limited_{experiment_number}.png".format(
+                                                                                output_folder = output_folder, 
+                                                                                experiment_number = experiment_number))
+    elif not limits_applied:
+        plt.savefig("{output_folder}/true_strain_microstrain_{experiment_number}.png".format(
+                                                                                output_folder = output_folder, 
+                                                                                experiment_number = experiment_number))
+    plt.show()
+
+    # plot the lattice microstrain variation with applied true strain in the chosen loading direction
+    print(f"Lattice microstrain variation with applied true strain in chosen loading direction, defined at an azimuthal angle of '{azimuth_load_direction}' degrees:", end='\n\n')
+    
+    # create dictionary for saving lattice microstrain
+    microstrain_write = dict()
+    
+    plt.figure(figsize=(10,8))
+    plt.minorticks_on()
+    
+    for peak in peak_label:
+        
+        peak_position_time_array = np.array(peak_position_time[peak][azimuth_load_direction])
+        microstrain = calc_strain(peak_position_time_array[start_index:end_index])*1e6
+        microstrain = medfilt(microstrain,filter_data)
+        microstrain_write[peak] = microstrain[0:number_of_points]
+        
+        plt.plot(true_strain[0:number_of_points],microstrain[0:number_of_points],
+                 marker=plane_marker[peak],color=plane_colour[peak],markersize=10,label=peak)
+        plt.legend(fontsize=20)
+        plt.xlabel('True Strain, ${\epsilon}$, (MPa)', fontsize = 20)
+        plt.ylabel('Microstrain', fontsize = 20)
+        plt.tight_layout()
+        
+        if true_strain_limit > 0:
+            plt.xlim([0, true_strain_limit])
+            limits_applied = True
+            
+        if true_strain_limit < 0 :
+            plt.xlim([true_strain_limit, 0])
+            limits_applied = True
+        
+        if microstrain_limit > 0:
+            plt.ylim([0, microstrain_limit])
+            limits_applied = True
+            
+        if microstrain_limit < 0 :
+            plt.ylim([microstrain_limit, 0])
+            limits_applied = True
+        
+    if limits_applied:
+        plt.savefig("{output_folder}/true_strain_microstrain_load_direction_limited_{experiment_number}.png".format(
+                                                                                 output_folder = output_folder,  
+                                                                                 experiment_number = experiment_number))        
+    elif not limits_applied: 
+        plt.savefig("{output_folder}/true_strain_microstrain_load_direction_{experiment_number}.png".format(
+                                                                                 output_folder = output_folder,  
+                                                                                 experiment_number = experiment_number))
+    plt.show()
+    
+    # define the true stress for writing out
+    true_strain_write = true_strain[0:number_of_points]
+    
+    # open a file to save the microstrain measurements
+    output_text_path =  "{output_folder}/true_strain_microstrain_load_direction_{experiment_number}.txt".format(
+                                                                             output_folder = output_folder,  
+                                                                             experiment_number = experiment_number)
+    output_text_folder = pathlib.Path(output_text_path).parent
+    output_text_folder.mkdir(exist_ok=True)
+
+    with open(output_text_path, 'w') as output_file:
+        
+        output_file.write(f"True Strain \t")
+        
+        for peak in peak_label:
+            # write lattice plane peak labels at top of file
+            output_file.write(f"{peak} Microstrain \t")
+        
+        output_file.write(f"\n")
+        
+        # write true stress and microstrain values
+        for i in range(len(true_strain_write)):
+            output_file.write(f"{true_strain_write[i]}\t")
+            for peak in peak_label:
+                output_file.write(f"{microstrain_write[peak][i]}\t")
+            output_file.write(f"\n")
+            
+    number_of_peaks = len(peak_label)        
+    print(f"The lattice microstrain for '{number_of_peaks}' peaks has been saved to a .txt file: '{output_text_path}'.")

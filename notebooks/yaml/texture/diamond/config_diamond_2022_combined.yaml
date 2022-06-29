@@ -1,0 +1,83 @@
+image_numbers:
+    start: 
+        - 1
+    end: 
+        - 1
+    step: 
+        - 1
+# start, end and step defining the image numbers of diffraction patterns to analyse    
+
+file_paths:
+    input_text_path: ../../../SXRD_analysis/diamond_2022/texture-studies/{experiment_number:06d}/fourier-peak-analysis/{experiment_number:06d}-{intensity_type}-intensities/{experiment_number:06d}_summed_{image_number:01d}_peak_intensity_{label}.txt
+# input path of the texture text file, excluding the experiment number, intensity type and lattice plane peak label.
+
+    output_text_path: ../../../SXRD_analysis/diamond_2022/texture-studies/combined-intensities-MTEX/{experiment_start}+{experiment_end}-combined-{intensity_type}-intensities/combined_{image_number:01d}_peak_intensity_{label}.txt
+# output path for the texture text file, excluding the experiment number, intensity type and lattice plane peak label.    
+    
+user_inputs:
+    experiment_numbers:
+     # - 111439
+     # - 111575
+     # - 111440
+     # - 111576
+     # - 111441
+     # - 111606
+     # - 111442
+     # - 111578
+     # - 111443
+     # - 111579
+     # - 111444
+     # - 111580
+     # - 111445
+     # - 111581
+     # - 111446
+     # - 111582
+     # - 111447
+     # - 111583
+     # - 111448
+     # - 111584
+     # - 111449
+     # - 111585
+     # - 111450
+     # - 111586
+     # - 111451
+     # - 111587
+     # - 111452
+     # - 111588
+     # - 111453
+     # - 111589
+     # - 111454
+     # - 111590
+     # - 111455
+     # - 111591
+     # - 111456
+     # - 111592
+     # - 111457
+     # - 111593
+     # - 111458
+     # - 111594
+     # - 111459
+     # - 111595
+     # - 111460
+     # - 111596
+     # - 111461
+     # - 111597
+     # - 111462
+     # - 111598
+     # - 111463
+     # - 111599
+     # - 111464
+     # - 111600
+     # - 111465
+     # - 111601
+     # - 111466
+     # - 111602
+     # - 111467
+     # - 111603
+     - 111468
+     - 111604
+# list of experiment numbers for the sample intensity data to combine  
+     
+    intensity_type: raw
+#     intensity_type: powder-corrected
+# intensity type of the data to combine, options inlude 'raw' or 'powder-corrected'.

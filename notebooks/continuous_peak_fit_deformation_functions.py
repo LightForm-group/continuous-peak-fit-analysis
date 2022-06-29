@@ -1,5 +1,6 @@
 import pathlib
 import re
+import os
 from tqdm.notebook import tqdm
 import numpy as np
 import matplotlib.pyplot as plt
@@ -190,7 +191,9 @@ def sequence_checker(array, sequence_length: int = 4):
     """ Check for sequence of consecutive numbers in array
     and return array when sequence has been found.
     """
+    new_array = []
     for i in range(len(array) - 1):
+        # array[i] + 1 is for checking equivalence of consecutive numbers
         if(array[i] + 1 == array[i + 1]):
             new_array += [array[i]]
             if(len(new_array) == sequence_length):
@@ -219,9 +222,9 @@ def match_array_numbers(image_numbers, start_number, end_number):
 
 def load_ETMT_data(etmt_file_path):
     
-    print("Loading ETMT data.")
+    print("Loading ETMT data.", end='\n\n')
           
-    etmt_file = np.loadtxt(etmt_file_path, delimiter=',', skiprows=1)
+    etmt_data = np.loadtxt(etmt_file_path, delimiter=',', skiprows=1)
     
     time = etmt_data[:,0]
     force = etmt_data[:,1]
@@ -229,13 +232,15 @@ def load_ETMT_data(etmt_file_path):
     stress = etmt_data[:,3]
     true_strain = etmt_data[:,4]
     true_stress = etmt_data[:,5]
-    temperature = etmt_data[:,6]
+    temperature_etmt = etmt_data[:,6]
+    temperature_eurotherm = etmt_data[:,7]
+    frame_signal = etmt_data[:,8]
     
-    return time, force, position, stress, true_strain, true_stress, temperature
+    return time, force, position, stress, true_strain, true_stress, temperature_etmt, temperature_eurotherm, frame_signal
     
 def load_dilatometer_data(dilatometer_file_path):
     
-    print("Loading Dilatometer data.")
+    print("Loading Dilatometer data.", end='\n\n')
 
     dilatometer_file = open(dilatometer_file_path,'r',encoding='latin-1')
     dilatometer_data = np.loadtxt(dilatometer_file, skiprows=3)
@@ -273,7 +278,7 @@ def plot_thermomechanical_data(thermomech_equipment: str, thermomech_file_path: 
                                number_deform_frames: int = 1000, acquisition_frequency_sxrd: int = 10,  
                                filter_data: int = 1):
     """ Plot true stress, true stress versus true strain, and true stress versus true strain 
-    at the frequency of SXRD images from data recorded at the Dilatometer data.
+    at the frequency of SXRD images from data recorded from the ETMT or Dilatometer.
     
     :param file_path_etmt_data: input file path string.
     :param first_point: value defining the start point of deformation.
@@ -285,34 +290,43 @@ def plot_thermomechanical_data(thermomech_equipment: str, thermomech_file_path: 
     :return: NumPy arrays for the true stress and true strain.
     """
     # load the thermomechanical data
-    
+        
     if thermomech_equipment == "ETMT":
-        time, force, position, stress, true_strain, true_stress, temperature = load_etmt_data(thermomech_file_path)
+        # at low strain applied stress is approximately true stress, so can use applied stress directly here
+        time, force, position, true_stress, true_strain, truer_stress, temperature_etmt, temperature_eurotherm, frame_signal = load_ETMT_data(thermomech_file_path)
+        print("Warning! Using Applied Stress as True Stress. Only valid for low strains. Alter script [here] to use True Stress from Resistance Method.", end='\n\n')
         
     elif thermomech_equipment == "Dilatometer":
         points, time, temperature, delta_length, force, \
         strain, true_stress, true_strain, true_strain_rate = load_dilatometer_data(thermomech_file_path)
         
     else:
-        print("Thermomechanical equipment not recognised, expected either ETMT or Dilatometer")
+        print("Thermomechanical equipment not recognised, expected either ETMT or Dilatometer", end='\n\n')
         return
     
     # calculate the acquisition frequency of the thermomechanical data and ratio to the SXRD pattern images
-    acquisition_frequency_dilatometer = 1 / np.average(np.diff(time))
-    print(f"The acquisition frequency of the {thermomech_equipment} data is:", acquisition_frequency_dilatometer, " Hz", end='\n\n')
+    acquisition_frequency_thermomech = 1 / np.average(np.diff(time))
+    print(f"The acquisition frequency of the {thermomech_equipment} data is:", acquisition_frequency_thermomech, " Hz", end='\n\n')
 
-    acquisition_frequency_ratio = float(acquisition_frequency_dilatometer / acquisition_frequency_sxrd)
+    acquisition_frequency_ratio = float(acquisition_frequency_thermomech / acquisition_frequency_sxrd)
     print(f"The ratio of {thermomech_equipment}-to-SXRD acquisition is:", acquisition_frequency_ratio, end='\n\n')
     
     deform_end = int(acquisition_frequency_ratio * number_deform_frames)
+
+    if thermomech_equipment == "ETMT":
+        deforming = np.where(true_stress > minimum_stress)
+        deform_start = deforming[0][0]
+        print("The deformation begins at array index:", deform_start, end='\n\n')
     
-    # find the start of deformation - define as sequence of ? points with stress greater than ? MPa
-    deforming = np.where(true_stress > minimum_stress)
-    deforming_sequence = sequence_checker(deforming[0], deform_sequence)
-    deform_start = deforming_sequence[0]
-    print("The deformation begins at array index:", deform_start, end='\n\n')
+    elif thermomech_equipment == "Dilatometer":
+        # find the start of deformation - define as sequence of ? points with stress greater than ? MPa
+        deforming = np.where(true_stress > minimum_stress)
+        deforming_sequence = sequence_checker(deforming[0], deform_sequence)
+        deform_start = deforming_sequence[0]
+        print("The deformation begins at array index:", deform_start, end='\n\n')
     
     # define the end of deformation
+    print("Deform Frames: ", len(true_stress))
     deform_end = int(deform_start + (acquisition_frequency_ratio * number_deform_frames))
     print("The deformation ends at array index:", deform_end, end='\n\n')
     
@@ -359,7 +373,16 @@ def plot_thermomechanical_data(thermomech_equipment: str, thermomech_file_path: 
     plt.ylabel('True Stress, $\sigma$ (MPa)', fontsize = 20)
     plt.xlabel('True Strain, $\epsilon$', fontsize = 20)
     plt.tight_layout()
+    
     output_folder = output_file_path.format(experiment_number = experiment_number)
+    
+    # check output folder exists
+    CHECK_FOLDER = os.path.isdir(output_folder)
+
+    if not CHECK_FOLDER:
+        os.makedirs(output_folder)
+        print("Created folder : ", output_folder)
+
     plt.savefig("{output_folder}/true_stress_strain_{experiment_number}.png".format(output_folder = output_folder,  
                                                                                     experiment_number = experiment_number))
     plt.show()

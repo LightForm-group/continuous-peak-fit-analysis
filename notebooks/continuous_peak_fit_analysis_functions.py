@@ -137,7 +137,7 @@ def extract_combine_intensity_input(config_path: str):
 
     # number and spacing of files
     image_numbers_combine = []
-    for i in range(len(start)):
+    for i in range(len(start_combine)):
         image_numbers_combine.append(get_image_numbers(start_combine[i],end_combine[i],step_combine[i]))
     
 #     # number and spacing of files
