@@ -1,0 +1,26 @@
+image_numbers:
+    start: 
+        - 1
+    end: 
+        - 1
+    step: 
+        - 1
+# start, end and step defining the image numbers of diffraction patterns to analyse    
+
+file_paths:
+    input_text_path: ../../../SXRD_analysis/diamond_2022_additional/texture-studies/{experiment_number:06d}/sample_30/{experiment_number:06d}-{intensity_type}-intensities/{experiment_number:06d}_summed_{image_number:01d}_peak_intensity_{label}.txt
+# input path of the texture text file, excluding the experiment number, intensity type and lattice plane peak label.
+
+    output_text_path: ../../../SXRD_analysis/diamond_2022_additional/texture-studies/combined-intensities-MTEX/{experiment_start}+{experiment_end}-combined-{intensity_type}-intensities/sample_30/combined_{image_number:01d}_peak_intensity_{label}.txt
+# output path for the texture text file, excluding the experiment number, intensity type and lattice plane peak label.    
+    
+user_inputs:
+    experiment_numbers:
+     - 112748
+     - 112750
+     - 114287
+# list of experiment numbers for the sample intensity data to combine  
+     
+    intensity_type: raw
+#     intensity_type: powder-corrected
+# intensity type of the data to combine, options inlude 'raw' or 'powder-corrected'.

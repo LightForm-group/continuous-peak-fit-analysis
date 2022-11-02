@@ -4,7 +4,7 @@
 .DS*
 __pycache__/
 .ipynb_checkpoints/
-*.fuse
+*.fuse*
 /.idea
 /venv
 /example-data/diamond_2021/

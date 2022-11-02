@@ -153,9 +153,9 @@ PF_001_max, PF_110_max, PF_111_max, returned_odf] = beta_texture_plotter(user_in
         pf.c = num2cell(set_scale_params)
 
         % Plot the Intensity Distributions
-        % plot(pf);
-        % annotate([xvector,yvector],'label',{'RD','TD'},'backgroundcolor','w')
-        % colorbar;
+        %plot(pf);
+        %annotate([xvector,yvector],'label',{'RD','TD'},'backgroundcolor','w')
+        %colorbar;
 
         % Calculate the ODF
         odf = calcODF(pf, 'RESOLUTION', odf_resolution);
