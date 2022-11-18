@@ -53,4 +53,34 @@ deformation_input:
 # conversion of analogue signal to load (C/V).
 
     position_conversion: 
-# conversion of analogue signal to load (mm/V). 
+# conversion of analogue signal to load (mm/V).
+
+    number_of_points_stress: 80
+# number of points to plot against true stress, typically capturing elastic to plastic transition - value of 0 will apply all points
+
+    number_of_points_strain: 0
+# number of points to plot against true strain - value of 0 will apply all points
+
+    true_stress_limit: 310
+# plot limit for true stress axis
+
+    true_strain_limit: 0.07
+# plot limit for true strain axis
+
+    microstrain_limit: 5600
+# plot limit for microstrain axis
+
+    FWHM_limit: 0
+# plot limit for full width half maximum (FWHM) axis
+
+    intensity_limit: 0
+# plot limit for intensity axis
+
+    relative_intensity_limit: 0
+# plot limit for relative intensity axis
+
+    intensity_x_FWHM_limit: 0
+# plot limit for intensity*FWHM axis
+
+    relative_intensity_x_FWHM_limit: 0
+# plot limit for relative intensity*FWHM axis

@@ -11,7 +11,7 @@ file_paths:
     input_text_path: ../../../SXRD_analysis/diamond_2021/{experiment_number:05d}/texture-cpf/{experiment_number:05d}-{intensity_type}-intensities/{experiment_number:05d}_summed_{image_number:01d}_peak_intensity_{label}.txt
 # input path of the texture text file, excluding the experiment number, intensity type and lattice plane peak label.
 
-    output_text_path: ../../../SXRD_analysis/diamond_2021/combined-intensities-MTEX/{experiment_start}-to-{experiment_end}-combined-{intensity_type}-intensities/combined_{image_number:01d}_peak_intensity_{label}.txt
+    output_text_path: ../../../SXRD_analysis/diamond_2021/combined-intensities-CPF/{experiment_start}-to-{experiment_end}-combined-{intensity_type}-intensities/combined_{image_number:01d}_peak_intensity_{label}.txt
 # output path for the texture text file, excluding the experiment number, intensity type and lattice plane peak label.    
     
 user_inputs:

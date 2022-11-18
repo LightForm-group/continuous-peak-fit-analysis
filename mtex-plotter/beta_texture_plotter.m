@@ -178,8 +178,10 @@ PF_001_max, PF_110_max, PF_111_max, returned_odf] = beta_texture_plotter(user_in
 
         % Analyse the ODF
         % plot the ODF with orthorhombic symmetry
-        odf.SS=specimenSymmetry('orthorhombic');
         specSym = 'orthorhombic';
+        odf.SS=specimenSymmetry(specSym); % only crops the ODF at the moment
+        % SS = specimenSymmetry(specSym);
+        % odf = symmetrise_ODF(odf, CS, SS);
         output_filename = strcat(outputDir,'/',experiment_number_string,'_ODF_',test_number_string)
         ODF_plot(phase, odf, odf_max, output_filename, specSym);
 
