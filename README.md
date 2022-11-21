@@ -50,7 +50,7 @@ Firstly, use the following command to create the venv directory which will conta
 ```unix
 python -m venv ~/Desktop/continuous-peak-fit-analysis/venv
 ```
-**5. Your `pyFAI-integration-caking/` directory should now contain `venv/`. Install the relevant libraries to this venv by first activating the venv:**
+**5. Your `continuous-peak-fit-analysis/` directory should now contain `venv/`. Install the relevant libraries to this venv by first activating the venv:**
 ```unix
 source ~/Desktop/continuous-peak-fit-analysis/venv/bin/activate
 ```

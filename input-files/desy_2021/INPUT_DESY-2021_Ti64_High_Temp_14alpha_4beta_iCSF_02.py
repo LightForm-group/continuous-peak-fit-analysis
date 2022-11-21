@@ -5,12 +5,12 @@ import os
 drive = "/mnt/iusers01/jf01/mbcx9cd4/rds_lightform/"
 
 # properties of the data files.
-datafile_directory = drive + 'SXRD_raw_data/desy_2021/diffraction_images/Def_04'
-datafile_Basename  = "Ti64_Rolled_ND_Compress_910C_1-00s-1_Multi-Hit_Temp_Cycl_4Cs-1_810_Cool_4Cs-1_Def04_3-"
+datafile_directory = drive + 'SXRD_raw_data/desy_2021/diffraction_images/Def_07'
+datafile_Basename  = "Ti64_TIMET_RD_Compress_910C__1-00s-1_Single-Hit_Beta-Anneal_1Cs-1_1050C_Cool_4Cs-1_Def07_1-"
 datafile_Ending    = ".tif"
-datafile_StartNum  = 300
-datafile_EndNum    = 516
-datafile_Step = 5
+datafile_StartNum  = 1850
+datafile_EndNum    = 2150
+datafile_Step = 1
 datafile_NumDigit  = 5
 
 # calibration and masking.
@@ -36,6 +36,7 @@ fit_orders = [
              "hkl": '100',
              "d-space": 2,
              "height": 6,
+             "height-type": "spline-cubic",
              "profile": 0,
              #"profile_fixed": 1,
              "width": 0,
@@ -50,6 +51,7 @@ fit_orders = [
              "hkl": '002',
              "d-space": 2,
              "height": 6,
+             "height-type": "spline-cubic",
              "profile": 0,
              #"profile_fixed": 1,
              "width": 0,
@@ -59,6 +61,7 @@ fit_orders = [
              "hkl": '110',
              "d-space": 2,
              "height": 6,
+             "height-type": "spline-cubic",
              "profile": 0,
              #"profile_fixed": 1,
              "width": 0,
@@ -68,6 +71,7 @@ fit_orders = [
              "hkl": '101',
              "d-space": 2,
              "height": 6,
+             "height-type": "spline-cubic",
              "profile": 0,
              #"profile_fixed": 1,
              "width": 0,
@@ -103,6 +107,7 @@ fit_orders = [
              "hkl": '102',
              "d-space": 2,
              "height": 6,
+             "height-type": "spline-cubic",
              "profile": 0,
              #"profile_fixed": 1,
              "width": 0,
@@ -117,6 +122,7 @@ fit_orders = [
              "hkl": '200',
              "d-space": 2,
              "height": 6,
+             "height-type": "spline-cubic",
              "profile": 0,
              #"profile_fixed": 1,
              "width": 0,
@@ -131,6 +137,7 @@ fit_orders = [
              "hkl": '110',
              "d-space": 2,
              "height": 6,
+             "height-type": "spline-cubic",
              "profile": 0,
              #"profile_fixed": 1,
              "width": 0,
@@ -145,6 +152,7 @@ fit_orders = [
              "hkl": '103',
              "d-space": 2,
              "height": 6,
+             "height-type": "spline-cubic",
              "profile": 0,
              #"profile_fixed": 1,
              "width": 0,
@@ -159,6 +167,7 @@ fit_orders = [
              "hkl": '200',
              "d-space": 2,
              "height": 6,
+             "height-type": "spline-cubic",
              "profile": 0,
              #"profile_fixed": 1,
              "width": 0,
@@ -168,6 +177,7 @@ fit_orders = [
              "hkl": '112',
              "d-space": 2,
              "height": 6,
+             "height-type": "spline-cubic",
              "profile": 0,
              #"profile_fixed": 1,
              "width": 0,
@@ -177,6 +187,7 @@ fit_orders = [
              "hkl": '201',
              "d-space": 2,
              "height": 6,
+             "height-type": "spline-cubic",
              "profile": 0,
              #"profile_fixed": 1,
              "width": 0,
@@ -212,6 +223,7 @@ fit_orders = [
              "hkl": '004',
              "d-space": 2,
              "height": 6,
+             "height-type": "spline-cubic",
              "profile": 0,
              #"profile_fixed": 1,
              "width": 0,
@@ -221,6 +233,7 @@ fit_orders = [
              "hkl": '220',
              "d-space": 2,
              "height": 6,
+             "height-type": "spline-cubic",
              "profile": 0,
              #"profile_fixed": 1,
              "width": 0,
@@ -230,6 +243,7 @@ fit_orders = [
              "hkl": '202',
              "d-space": 2,
              "height": 6,
+             "height-type": "spline-cubic",
              "profile": 0,
              #"profile_fixed": 1,
              "width": 0,
@@ -265,13 +279,14 @@ fit_orders = [
              "hkl": '104',
              "d-space": 2,
              "height": 6,
+             "height-type": "spline-cubic",
              "profile": 0,
              #"profile_fixed": 1,
              "width": 0,
              "symmetry": 2
            }],
        },
-	   {
+       {
          "range": [[6.77, 7.09]],
          "background": [0,0],
          "peak": [{
@@ -279,20 +294,22 @@ fit_orders = [
              "hkl": '310',
              "d-space": 2,
              "height": 6,
+             "height-type": "spline-cubic",
              "profile": 0,
              #"profile_fixed": 1,
              "width": 0,
              "symmetry": 2
            }],
        },
-	   {
-         "range": [[7.07, 7.90]],
+       {
+         "range": [[7.07, 7.50]],
          "background": [0,0],
          "peak": [{
              "phase": "Ti64alpha",
              "hkl": '203',
              "d-space": 2,
              "height": 6,
+             "height-type": "spline-cubic",
              "profile": 0,
              #"profile_fixed": 1,
              "width": 0,
@@ -302,24 +319,7 @@ fit_orders = [
              "hkl": '210',
              "d-space": 2,
              "height": 6,
-             "profile": 0,
-             #"profile_fixed": 1,
-             "width": 0,
-             "symmetry": 2
-           },{
-             "phase": "Ti64alpha",
-             "hkl": '211',
-             "d-space": 2,
-             "height": 6,
-             "profile": 0,
-             #"profile_fixed": 1,
-             "width": 0,
-             "symmetry": 2
-		   },{
-             "phase": "Ti64alpha",
-             "hkl": '114',
-             "d-space": 2,
-             "height": 6,
+             "height-type": "spline-cubic",
              "profile": 0,
              #"profile_fixed": 1,
              "width": 0,
@@ -338,25 +338,11 @@ fit_orders = [
                                     [2,23.187,7.36],
                                     [2,23.212,7.36], 
                                     [2,23.158,7.36], 
-                                    [2,123.246,7.36],
-                                    [3,-120.5,7.50],
-                                    [3,-58.997,7.50],
-                                    [3,59.289,7.50],
-                                    [3,23.187,7.50],
-                                    [3,23.212,7.50], 
-                                    [3,23.158,7.50], 
-                                    [3,123.246,7.50],
-									[4,-120.5,7.71],
-                                    [4,-58.997,7.71],
-                                    [4,59.289,7.71],
-                                    [4,23.187,7.71],
-                                    [4,23.212,7.71], 
-                                    [4,23.158,7.71], 
-                                    [4,123.246,7.71]]
+                                    [2,123.246,7.36]]
        },  
-	]
+    ]
 
 # output settings
-Output_directory   = drive + 'SXRD_analysis/desy_2021/experiment04-deformation/fourier-peak-analysis/'
+Output_directory   = drive + 'SXRD_analysis/desy_2021/experiment07-deformation/fourier-peak-analysis/'
 Output_type        = 'MultiFit' #'DifferentialStrain' # differential strain option gives the principal stress/strain axis
 Output_NumAziWrite = 360

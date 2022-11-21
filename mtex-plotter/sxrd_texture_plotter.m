@@ -15,7 +15,7 @@
 % the ODFs, PFs and a text file containing the texture strength values.
 
 %user_inputs_filepath = 'json/diamond/config_diamond_2022_additional_combined_beta.json'
-user_inputs_filepath = 'json/diamond/config_diamond_2022_beta_018.json'
+user_inputs_filepath = 'json/diamond/config_diamond_2022_alpha_019.json'
 %user_inputs_filepath = 'json/diamond/config_diamond_2021_summed_alpha.json'
 %user_inputs_filepath = 'json/diamond/config_diamond_2017_beta.json'
 %user_inputs_filepath = 'json/desy/config_desy_2021_alpha_10.json'

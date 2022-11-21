@@ -16,7 +16,7 @@ datafile_NumDigit  = 5
 # calibration and masking.
 Calib_type   = "Dioptas"
 # Calib_detector = 'unknown'
-# Calib_data     = drive + 'SXRD_analysis/desy_2021/calibration-dioptas/LaB6_1554mm_Dilatometer-00003.tif'
+# Calib_data     = drive + 'SXRD_analysis/diamond_2022/calibration-dioptas/00001.tif'
 Calib_param    = drive + 'SXRD_analysis/diamond_2022/calibration-dioptas/CeO2_Diamond_2022_750mm.poni'
 Calib_mask     = drive + 'SXRD_analysis/diamond_2022/calibration-dioptas/CeO2_Diamond_2022_750mm.mask'
 Calib_pixels = 200
@@ -36,6 +36,7 @@ fit_orders = [
              "hkl": '100',
              "d-space": 2,
              "height": 6,
+             "height-type": "spline-cubic",
              "profile": 0,
              #"profile_fixed": 1,
              "width": 0,
@@ -50,6 +51,7 @@ fit_orders = [
              "hkl": '002',
              "d-space": 2,
              "height": 6,
+             "height-type": "spline-cubic",
              "profile": 0,
              #"profile_fixed": 1,
              "width": 0,
@@ -59,6 +61,7 @@ fit_orders = [
              "hkl": '110',
              "d-space": 2,
              "height": 6,
+             "height-type": "spline-cubic",
              "profile": 0,
              #"profile_fixed": 1,
              "width": 0,
@@ -68,6 +71,7 @@ fit_orders = [
              "hkl": '101',
              "d-space": 2,
              "height": 6,
+             "height-type": "spline-cubic",
              "profile": 0,
              #"profile_fixed": 1,
              "width": 0,
@@ -103,6 +107,7 @@ fit_orders = [
              "hkl": '102',
              "d-space": 2,
              "height": 6,
+             "height-type": "spline-cubic",
              "profile": 0,
              #"profile_fixed": 1,
              "width": 0,
@@ -117,6 +122,7 @@ fit_orders = [
              "hkl": '200',
              "d-space": 2,
              "height": 6,
+             "height-type": "spline-cubic",
              "profile": 0,
              #"profile_fixed": 1,
              "width": 0,
@@ -131,6 +137,7 @@ fit_orders = [
              "hkl": '110',
              "d-space": 2,
              "height": 6,
+             "height-type": "spline-cubic",
              "profile": 0,
              #"profile_fixed": 1,
              "width": 0,
@@ -145,6 +152,7 @@ fit_orders = [
              "hkl": '103',
              "d-space": 2,
              "height": 6,
+             "height-type": "spline-cubic",
              "profile": 0,
              #"profile_fixed": 1,
              "width": 0,
@@ -159,6 +167,7 @@ fit_orders = [
              "hkl": '200',
              "d-space": 2,
              "height": 6,
+             "height-type": "spline-cubic",
              "profile": 0,
              #"profile_fixed": 1,
              "width": 0,
@@ -168,6 +177,7 @@ fit_orders = [
              "hkl": '112',
              "d-space": 2,
              "height": 6,
+             "height-type": "spline-cubic",
              "profile": 0,
              #"profile_fixed": 1,
              "width": 0,
@@ -177,6 +187,7 @@ fit_orders = [
              "hkl": '201',
              "d-space": 2,
              "height": 6,
+             "height-type": "spline-cubic",
              "profile": 0,
              #"profile_fixed": 1,
              "width": 0,
@@ -212,6 +223,7 @@ fit_orders = [
              "hkl": '004',
              "d-space": 2,
              "height": 6,
+             "height-type": "spline-cubic",
              "profile": 0,
              #"profile_fixed": 1,
              "width": 0,
@@ -221,6 +233,7 @@ fit_orders = [
              "hkl": '220',
              "d-space": 2,
              "height": 6,
+             "height-type": "spline-cubic",
              "profile": 0,
              #"profile_fixed": 1,
              "width": 0,
@@ -230,6 +243,7 @@ fit_orders = [
              "hkl": '202',
              "d-space": 2,
              "height": 6,
+             "height-type": "spline-cubic",
              "profile": 0,
              #"profile_fixed": 1,
              "width": 0,
@@ -265,20 +279,7 @@ fit_orders = [
              "hkl": '104',
              "d-space": 2,
              "height": 6,
-             "profile": 0,
-             #"profile_fixed": 1,
-             "width": 0,
-             "symmetry": 2
-           }],
-       },
-	   {
-         "range": [[7.52, 7.80]],
-         "background": [0,0],
-         "peak": [{
-             "phase": "Ti64beta",
-             "hkl": '310',
-             "d-space": 2,
-             "height": 6,
+             "height-type": "spline-cubic",
              "profile": 0,
              #"profile_fixed": 1,
              "width": 0,
@@ -286,20 +287,36 @@ fit_orders = [
            }],
        },
        {
-         "range": [[7.85, 8.16]],
+         "range": [[7.52, 7.80]],
          "background": [0,0],
          "peak": [{
-             "phase": "Ti64alpha",
-             "hkl": '203',
+             "phase": "Ti64beta",
+             "hkl": '310',
              "d-space": 2,
              "height": 6,
+             "height-type": "spline-cubic",
              "profile": 0,
              #"profile_fixed": 1,
              "width": 0,
              "symmetry": 2
            }],
        },
-	]
+       {
+         "range": [[7.85, 8.15]],
+         "background": [0,0],
+         "peak": [{
+             "phase": "Ti64alpha",
+             "hkl": '203',
+             "d-space": 2,
+             "height": 6,
+             "height-type": "spline-cubic",
+             "profile": 0,
+             #"profile_fixed": 1,
+             "width": 0,
+             "symmetry": 2
+           }],
+       },
+    ]
 
 # output settings
 Output_directory   = drive + 'SXRD_analysis/diamond_2022/004_Ti64_TIFUN-R2_RD_Deform_850C_1mms-1/fourier-peak-analysis/'

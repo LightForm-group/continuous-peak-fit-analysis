@@ -15,7 +15,7 @@ file_paths:
 # output path for the texture text file, excluding the experiment number, intensity type, image number and lattice plane peak label.
     
 user_inputs: 
-    experiment_number: 103851
+    experiment_number: 103840
 # experiment number of the test
     
     data_resolution: 1

@@ -7,6 +7,12 @@ __pycache__/
 *.fuse*
 /.idea
 /venv
+/example-analysis/1038*
+/example-analysis/combined*
 /example-data/diamond_2021/
 /example-data/diamond_2017/
-/instructions/
+/example-data/1038*
+/example-data/raw*
+/example-results/1038*
+/example-results/combined*
+/example-results/texture*
