@@ -7,7 +7,187 @@
 	"test_number":
 	{
 		"characters": 1,
-		"stage1":
+		"sample1":
+		{
+			"start": [1],
+			"end": [1],
+			"step": [1]
+		},
+		"sample2":
+		{
+			"start": [1],
+			"end": [1],
+			"step": [1]
+		},
+		"sample3":
+		{
+			"start": [1],
+			"end": [1],
+			"step": [1]
+		},
+		"sample4":
+		{
+			"start": [1],
+			"end": [1],
+			"step": [1]
+		},
+		"sample5":
+		{
+			"start": [1],
+			"end": [1],
+			"step": [1]
+		},
+		"sample6":
+		{
+			"start": [1],
+			"end": [1],
+			"step": [1]
+		},
+		"sample7":
+		{
+			"start": [1],
+			"end": [1],
+			"step": [1]
+		},
+		"sample8":
+		{
+			"start": [1],
+			"end": [1],
+			"step": [1]
+		},
+		"sample9":
+		{
+			"start": [1],
+			"end": [1],
+			"step": [1]
+		},
+		"sample10":
+		{
+			"start": [1],
+			"end": [1],
+			"step": [1]
+		},
+		"sample11":
+		{
+			"start": [1],
+			"end": [1],
+			"step": [1]
+		},
+		"sample12":
+		{
+			"start": [1],
+			"end": [1],
+			"step": [1]
+		},
+		"sample13":
+		{
+			"start": [1],
+			"end": [1],
+			"step": [1]
+		},
+		"sample14":
+		{
+			"start": [1],
+			"end": [1],
+			"step": [1]
+		},
+		"sample15":
+		{
+			"start": [1],
+			"end": [1],
+			"step": [1]
+		},
+		"sample16":
+		{
+			"start": [1],
+			"end": [1],
+			"step": [1]
+		},
+		"sample17":
+		{
+			"start": [1],
+			"end": [1],
+			"step": [1]
+		},
+		"sample18":
+		{
+			"start": [1],
+			"end": [1],
+			"step": [1]
+		},
+		"sample19":
+		{
+			"start": [1],
+			"end": [1],
+			"step": [1]
+		},
+		"sample20":
+		{
+			"start": [1],
+			"end": [1],
+			"step": [1]
+		},
+		"sample21":
+		{
+			"start": [1],
+			"end": [1],
+			"step": [1]
+		},
+		"sample22":
+		{
+			"start": [1],
+			"end": [1],
+			"step": [1]
+		},
+		"sample23":
+		{
+			"start": [1],
+			"end": [1],
+			"step": [1]
+		},
+		"sample24":
+		{
+			"start": [1],
+			"end": [1],
+			"step": [1]
+		},
+		"sample25":
+		{
+			"start": [1],
+			"end": [1],
+			"step": [1]
+		},
+		"sample26":
+		{
+			"start": [1],
+			"end": [1],
+			"step": [1]
+		},
+		"sample27":
+		{
+			"start": [1],
+			"end": [1],
+			"step": [1]
+		},
+		"sample28":
+		{
+			"start": [1],
+			"end": [1],
+			"step": [1]
+		},
+		"sample29":
+		{
+			"start": [1],
+			"end": [1],
+			"step": [1]
+		},
+		"sample30":
+		{
+			"start": [1],
+			"end": [1],
+			"step": [1]
+		},
+		"sample31":
 		{
 			"start": [1],
 			"end": [1],

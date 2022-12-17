@@ -211,17 +211,17 @@ PF_001_max, PF_110_max, PF_111_max, returned_odf] = beta_texture_plotter(user_in
         misorientation = odf_misorientation*degree
 
         % seperate a texture component and calculate the volume fraction
-        disp(['Calculating cube volume fraction for ', test_number_string]);
+        disp('Calculating cube volume fraction for ', test_number_string);
         cube_volume_fraction(i) = volume(odf,cube,misorientation)*100
-        disp(['Calculating rotated cube volume fraction for ', test_number_string]);
+        disp('Calculating rotated cube volume fraction for ', test_number_string);
         rotated_cube_volume_fraction(i) = volume(odf,rotated_cube,misorientation)*100
-        disp(['Calculating gamma 1A volume fraction for ', test_number_string]);
+        disp('Calculating gamma 1A volume fraction for ', test_number_string);
         gamma_1A_volume_fraction(i) = volume(odf,gamma_1A,misorientation)*100
-        disp(['Calculating gamma 1B volume fraction for ', test_number_string]);
+        disp('Calculating gamma 1B volume fraction for ', test_number_string);
         gamma_1B_volume_fraction(i) = volume(odf,gamma_1B,misorientation)*100
-        disp(['Calculating gamma 2A volume fraction for ', test_number_string]);
+        disp('Calculating gamma 2A volume fraction for ', test_number_string);
         gamma_2A_volume_fraction(i) = volume(odf,gamma_2A,misorientation)*100
-        disp(['Calculating gamma 2B volume fraction for ', test_number_string]);
+        disp('Calculating gamma 2B volume fraction for ', test_number_string);
         gamma_2B_volume_fraction(i) = volume(odf,gamma_2B,misorientation)*100
 
         % write the texture values to file

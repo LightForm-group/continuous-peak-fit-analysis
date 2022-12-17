@@ -363,13 +363,14 @@ returned_odf] = alpha_texture_plotter(user_inputs_filepath, inputDir, data_type,
         misorientation = odf_misorientation*degree
 
         % seperate a texture component and calculate the volume fraction
+        display_text = []
         disp(['Calculating basal TD volume fraction for ', test_number_string]);
         basal_TD_volume_fraction(i) = volume(odf, basal_TD,misorientation)*100
         disp(['Calculating basal ND volume fraction for ', test_number_string]);
         basal_ND_volume_fraction(i) = volume(odf, basal_ND,misorientation)*100
         disp(['Calculating basal RD volume fraction for ', test_number_string]);
         basal_RD_volume_fraction(i) = volume(odf, basal_RD,misorientation)*100
-        disp(['Calculating basal 45 volume fraction for ', test_number_string]);
+        disp(['Calculating basal 45 volume fraction for ', test_number_string);
         basal_45_volume_fraction(i) = volume(odf, basal_45,misorientation)*100
 
         % write the texture values to file
