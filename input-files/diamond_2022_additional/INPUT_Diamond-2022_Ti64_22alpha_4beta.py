@@ -19,7 +19,7 @@ Calib_type   = "Dioptas"
 # Calib_data     = drive + 'SXRD_analysis/diamond_2022/calibration-dioptas/00001.tif'
 Calib_param    = drive + 'SXRD_analysis/diamond_2022_additional/calibration-dioptas/july/112747_LaB6_Diamond_2022_640mm.poni'
 Calib_mask     = drive + 'SXRD_analysis/diamond_2022_additional/calibration-dioptas/july/112747_LaB6_Diamond_2022_640mm.mask'
-Calib_pixels = 200
+Calib_pixels = 172
 
 
 # number of bins for initial fitting.

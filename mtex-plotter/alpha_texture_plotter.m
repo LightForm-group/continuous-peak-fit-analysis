@@ -289,8 +289,8 @@ returned_odf] = alpha_texture_plotter(user_inputs_filepath, inputDir, data_type,
 
         % Specify Specimen Symmetry
         % specimen symmetry
-        % SS = specimenSymmetry('triclinic'); % use for calculating pole figures
-        SS = specimenSymmetry('orthorhombic'); % use for calculating texture component volume fraction
+        SS = specimenSymmetry('triclinic'); % use for calculating pole figures
+        %SS = specimenSymmetry('orthorhombic'); % use for calculating texture component volume fraction
 
         % Import the Data
         % create a Pole Figure variable containing the data
@@ -332,11 +332,53 @@ returned_odf] = alpha_texture_plotter(user_inputs_filepath, inputDir, data_type,
         PF_prismatic2_max(i) = maxval(3);
 
         % Analyse the ODF
-        % plot the ODF with orthorhombic symmetry
+        % plot the ODF with orthorhombic symmetry by cropping ODF...
+        
         specSym = 'orthorhombic';
         odf.SS=specimenSymmetry(specSym); % only crops the ODF at the moment
+        
         % SS = specimenSymmetry(specSym);
         % odf = symmetrise_ODF(odf, CS, SS); % only works for 1 Fourier component
+        
+        % plot the ODF with orthorhombic symmetry by recalculating ODF...
+        
+        % Specify Specimen Symmetry
+        % specimen symmetry
+        %SS = specimenSymmetry('triclinic'); % use for calculating pole figures
+        SS = specimenSymmetry('orthorhombic'); % use for calculating texture component volume fraction
+
+        % Import the Data
+        % create a Pole Figure variable containing the data
+        pf = PoleFigure.load(fname,h,CS,SS,'interface','generic',...
+          'ColumnNames', { 'Polar Angle' 'Azimuth Angle' 'Intensity'});
+
+        % Correct Issue with pf.c Object
+        % scale parameters for pf.c sometimes read as array of [1,1],
+        % rather than array of 1 values, use command below 
+        % to overwrite any incorrect scale parameters, such as
+        % pf.c = {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
+
+        sz = [1 number_of_indices]
+        set_scale_params = ones(sz)
+        pf.c = num2cell(set_scale_params)
+
+        % Plot the Intensity Distributions
+        %plot(pf);
+        %annotate([xvector,yvector],'label',{'RD','TD'},'backgroundcolor','w')
+        %colorbar;
+
+        % Calculate the ODF
+        odf = calcODF(pf, 'RESOLUTION', odf_resolution);
+
+        if (euler1 >0) || (euler2 > 0) || (euler3 > 0)
+            % Rotate the ODF
+            rot = rotation('Euler', euler1*degree, euler2*degree, euler3*degree);
+            odf = rotate(odf,rot);
+        else
+            disp('ODF rotation not necessary.');
+        end
+        
+        % plot the ODF slices
         output_filename = strcat(outputDir,'/',experiment_number_string,'_ODF_',test_number_string)
         ODF_plot(phase, odf, odf_max, output_filename, specSym);
 
@@ -362,7 +404,7 @@ returned_odf] = alpha_texture_plotter(user_inputs_filepath, inputDir, data_type,
         % define the maximum possible misorientation
         misorientation = odf_misorientation*degree
 
-        % seperate a texture component and calculate the volume fraction
+        % separate a texture component and calculate the volume fraction
         disp(['Calculating basal TD volume fraction for ', test_number_string]);
         basal_TD_volume_fraction(i) = volume(odf, basal_TD,misorientation)*100
         disp(['Calculating basal ND volume fraction for ', test_number_string]);

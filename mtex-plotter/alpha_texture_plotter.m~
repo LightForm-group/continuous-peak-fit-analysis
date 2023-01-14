@@ -289,7 +289,7 @@ returned_odf] = alpha_texture_plotter(user_inputs_filepath, inputDir, data_type,
 
         % Specify Specimen Symmetry
         % specimen symmetry
-        % SS = specimenSymmetry('triclinic'); % use for calculating pole figures
+        SS = specimenSymmetry('triclinic'); % use for calculating pole figures
         SS = specimenSymmetry('orthorhombic'); % use for calculating texture component volume fraction
 
         % Import the Data
@@ -333,10 +333,16 @@ returned_odf] = alpha_texture_plotter(user_inputs_filepath, inputDir, data_type,
 
         % Analyse the ODF
         % plot the ODF with orthorhombic symmetry
-        specSym = 'orthorhombic';
-        odf.SS=specimenSymmetry(specSym); % only crops the ODF at the moment
+        
+        %specSym = 'orthorhombic';
+        %odf.SS=specimenSymmetry(specSym); % only crops the ODF at the moment
+        
         % SS = specimenSymmetry(specSym);
         % odf = symmetrise_ODF(odf, CS, SS); % only works for 1 Fourier component
+        
+        % plot the ODF with orthorhombic symmetry by recalculating ODF
+        
+        
         output_filename = strcat(outputDir,'/',experiment_number_string,'_ODF_',test_number_string)
         ODF_plot(phase, odf, odf_max, output_filename, specSym);
 
@@ -362,15 +368,14 @@ returned_odf] = alpha_texture_plotter(user_inputs_filepath, inputDir, data_type,
         % define the maximum possible misorientation
         misorientation = odf_misorientation*degree
 
-        % seperate a texture component and calculate the volume fraction
-        display_text = []
+        % separate a texture component and calculate the volume fraction
         disp(['Calculating basal TD volume fraction for ', test_number_string]);
         basal_TD_volume_fraction(i) = volume(odf, basal_TD,misorientation)*100
         disp(['Calculating basal ND volume fraction for ', test_number_string]);
         basal_ND_volume_fraction(i) = volume(odf, basal_ND,misorientation)*100
         disp(['Calculating basal RD volume fraction for ', test_number_string]);
         basal_RD_volume_fraction(i) = volume(odf, basal_RD,misorientation)*100
-        disp(['Calculating basal 45 volume fraction for ', test_number_string);
+        disp(['Calculating basal 45 volume fraction for ', test_number_string]);
         basal_45_volume_fraction(i) = volume(odf, basal_45,misorientation)*100
 
         % write the texture values to file

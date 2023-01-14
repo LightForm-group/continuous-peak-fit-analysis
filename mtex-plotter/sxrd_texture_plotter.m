@@ -3,7 +3,7 @@
 % intensity data, written in spherical polar coordinate format.
 % The script can be used for texture calculation, plotting of pole figures, 
 % plotting of ODFs and calculation of texture strength values. 
-% It can currently be used for both alpha and beta phases in titanium alloys.
+% It can currentlysss be used for both alpha and beta phases in titanium alloys.
 % But, it could easily be adapted for any phase in a crystal material...
 
 %% Define the user input configuration file
@@ -14,11 +14,14 @@
 % intensity data files, and then asked to select an output folder, to save
 % the ODFs, PFs and a text file containing the texture strength values.
 
-%user_inputs_filepath = 'json/diamond/config_diamond_2022_additional_combined_beta.json'
+% user_inputs_filepath = 'json/diamond/config_diamond_2022_additional_stage_scan_beta.json'
 %user_inputs_filepath = 'json/diamond/config_diamond_2022_beta_027.json'
 %user_inputs_filepath = 'json/diamond/config_diamond_2021_summed_alpha.json'
 %user_inputs_filepath = 'json/diamond/config_diamond_2017_beta.json'
-user_inputs_filepath = 'json/desy/config_desy_2020_alpha_10_volume_fraction.json'
+%user_inputs_filepath = 'json/desy/config_desy_2020_alpha_09b_volume_fraction.json'
+
+% creating odf for modelling
+user_inputs_filepath = 'json/diamond/config_diamond_2022_alpha_034.json'
 
 %% Load user inputs from JSON file
 
@@ -151,10 +154,10 @@ for i = 1:number_of_stages
     
     if strcmp(phase, 'alpha')
         % print header for alpha phase texture measurements
-        fprintf(output_text_file, 'Test Number \t Texture Index \t ODF Max \t phi1 Angle of ODF Max \t PHI Angle of ODF Max \t phi2 Angle of ODF Max \t {0002} PF Max \t {10-10} PF Max \t {11-20} PF Max \t Basal TD Volume Fraction \t Basal ND Volume Fraction \t Basal RD Volume Fraction \t Basal 45 Volume Fraction \n');
+        %fprintf(output_text_file, 'Test Number \t Texture Index \t ODF Max \t phi1 Angle of ODF Max \t PHI Angle of ODF Max \t phi2 Angle of ODF Max \t {0002} PF Max \t {10-10} PF Max \t {11-20} PF Max \t Basal TD Volume Fraction \t Basal ND Volume Fraction \t Basal RD Volume Fraction \t Basal 45 Volume Fraction \n');
 
         % define alpha crystal symmetry
-        CS = crystalSymmetry('6/mmm', [2.954 2.954 4.729], 'X||a*', 'Y||b', 'Z||c*', 'mineral', 'Titanium Alpha', 'color', 'light blue');
+        CS = crystalSymmetry('6/mmm', [2.954 2.954 4.729], 'X||b*', 'Y||a', 'Z||c*', 'mineral', 'Titanium Alpha', 'color', 'light blue');
         
         % analyse, plot and save alpha texture
         [TEXTURE_INDEX, odf_strength_max, phi1, PHI, phi2,...
@@ -167,7 +170,7 @@ for i = 1:number_of_stages
                                                                                                 odf_return)      
     elseif strcmp(phase, 'beta')
         % print header for beta phase texture measurements
-        fprintf(output_text_file, 'Test Number \t Texture Index \t ODF Max \t phi1 Angle of ODF Max \t PHI Angle of ODF Max \t phi2 Angle of ODF Max \t {001} PF Max \t {110} PF Max \t {111} PF Max \t Cube Volume Fraction \t Rotated Cube Volume Fraction \t Gamma 1A Volume Fraction \t Gamma 1B Volume Fraction \t Gamma 2A Volume Fraction \t Gamma 2B Volume Fraction \n');
+        fprintf(output_text_file, 'Test Number \t Texture Index \t ODF Max \t phi1 Angle of ODF Max \t PHI Angle of ODF Max \t phi2 Angle of ODF Max \t {001} PF Max \t {110} PF Max \t {111} PF Max \t Cube Volume Fraction \t Rotated Cube Volume Fraction \t Alpha Fibre Volume Fraction \t Gamma Fibre Volume Fraction \n');
 
         % define beta crystal symmetry
         CS = crystalSymmetry('m-3m', [3.192 3.192 3.192], 'mineral', 'Titanium Beta', 'color', 'light green');
@@ -185,6 +188,9 @@ for i = 1:number_of_stages
         disp('Phase not recognised.');
         return;
     end
+    
+    % save odf variable as file
+    save(strcat(outputDir.(stage),'/', phase, '_ODF.mat'), 'odf');
 end
 
 %% Plot the Texture Variation

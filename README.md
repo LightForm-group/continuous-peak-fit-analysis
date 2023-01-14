@@ -1,9 +1,9 @@
 continuous-peak-fit-analysis
 -----------
 
-A Python package for fitting full synchrotron diffraction pattern rings to analyse texture (intensity) and elastic lattice strain (position) changes. Uses the Continuous-Peak-Fit Python package for fitting the azimuth and time dependency of peaks with Fourier Series descriptions. 
+A Python package for fitting full synchrotron X-ray diffraction (SXRD) pattern rings to analyse texture (intensity) and elastic lattice strain (position) changes. Uses the Continuous-Peak-Fit Python package for fitting the azimuth and time dependency of peaks with Fourier Series descriptions.
 
-The notebooks can be used in series to setup and run the Continuous-Peak-Fit analysis and to analyse the resulting peak profile fits. The peak profile changes can be used to discern material changes, such as crystallographic texture and elastic lattice strain, which are guided by the notebooks. There is an option to combine the diffraction results with bulk behaviour measurements using external thermomechanical testing equipment.
+The notebooks can be used to setup and run Continuous-Peak-Fit analyses, and to analyse the resulting peak profile fits from a series of SXRD pattern images, to directly extract the material crystallographic properties. The peak profile changes, such as intensity and peak position, can be used to discern material changes, such as crystallographic texture and elastic lattice strain, which are guided by the notebooks. There is an option to combine the diffraction results with bulk behaviour measurements using external thermomechanical testing equipment.
 
 The package includes a separate folder of MTEX scripts, in MATLAB, for automatic analysis of the lattice plane intensities produced from Continuous-Peak-Fit, to calculate orientation distribution functions (ODFs), calculate texture intensity values and plot pole figures. More details about the setup of MTEX can be found in mtex-plotter/README-mtex-plotter.md
 
@@ -45,7 +45,7 @@ git clone https://github.com/LightForm-group/continuous-peak-fit-analysis.git
 ```unix
 cd ~/Desktop/continuous-peak-fit-analysis/
 ```
-**4. Next, create a python virtual environment (venv) which contains all of the python libraries required to use pyFAI.
+**4. Next, create a python virtual environment (venv) which contains all of the python libraries required to use continuous-peak-fit-analysis.
 Firstly, use the following command to create the venv directory which will contain the necessary libraries:**
 ```unix
 python -m venv ~/Desktop/continuous-peak-fit-analysis/venv
