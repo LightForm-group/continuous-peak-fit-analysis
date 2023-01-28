@@ -160,7 +160,11 @@ PF_001_max, PF_110_max, PF_111_max, returned_odf] = beta_texture_plotter(user_in
 
         % Calculate the ODF
         odf = calcODF(pf, 'RESOLUTION', odf_resolution);
-
+        
+        % Calculate the RP error value
+        %RP_error(i) = calcError(pf, odf, 'RP')
+        RP_error(i) = 0
+        
         if (euler1 >0) || (euler2 > 0) || (euler3 > 0)
             % Rotate the ODF
             rot = rotation('Euler', euler1*degree, euler2*degree, euler3*degree);
@@ -217,6 +221,10 @@ PF_001_max, PF_110_max, PF_111_max, returned_odf] = beta_texture_plotter(user_in
         % Calculate the ODF
         odf = calcODF(pf, 'RESOLUTION', odf_resolution);
 
+        % Calculate the RP error value
+        %RP_error(i) = calcError(pf, odf, 'RP')
+        RP_error(i) = 0
+        
         if (euler1 >0) || (euler2 > 0) || (euler3 > 0)
             % Rotate the ODF
             rot = rotation('Euler', euler1*degree, euler2*degree, euler3*degree);
@@ -267,7 +275,7 @@ PF_001_max, PF_110_max, PF_111_max, returned_odf] = beta_texture_plotter(user_in
         gamma_fibre_volume_fraction(i) = volume(odf,gamma_fibre,misorientation)*100
 
         % write the texture values to file
-        fprintf(output_text_file, '%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\n', test_number(i), TEXTURE_INDEX(i), odf_strength_max(i), rad2deg(phi1(i)), rad2deg(PHI(i)), rad2deg(phi2(i)), PF_001_max(i), PF_110_max(i), PF_111_max(i), cube_volume_fraction(i), rotated_cube_volume_fraction(i), alpha_fibre_volume_fraction(i), gamma_fibre_volume_fraction(i))
+        fprintf(output_text_file, '%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\n', test_number(i), TEXTURE_INDEX(i), odf_strength_max(i), rad2deg(phi1(i)), rad2deg(PHI(i)), rad2deg(phi2(i)), PF_001_max(i), PF_110_max(i), PF_111_max(i), cube_volume_fraction(i), rotated_cube_volume_fraction(i), alpha_fibre_volume_fraction(i), gamma_fibre_volume_fraction(i), RP_error(i))
         %fprintf(output_text_file, '%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\n', test_number(i), TEXTURE_INDEX(i), odf_strength_max(i), rad2deg(phi1(i)), rad2deg(PHI(i)), rad2deg(phi2(i)), PF_001_max(i), PF_110_max(i), PF_111_max(i))
         
         % return ODF if requested

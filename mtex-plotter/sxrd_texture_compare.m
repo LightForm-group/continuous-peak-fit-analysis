@@ -1,4 +1,4 @@
-%% SXRD_TEXTURE_PLOTTER
+%% SXRD_TEXTURE_COMPARE
 % This script can be used  for the batch processing of synchrotron
 % intensity data, written in spherical polar coordinate format.
 % The script can be used for plotting the difference between ODFs, 
@@ -14,6 +14,7 @@
 % intensity data files for the standard ODF, followed by another input folder,
 % containing  the data for the analysis ODF, and then asked to select an output folder, 
 % to save the figures showing the differences between the two ODFs.
+
 user_inputs_filepath = 'json/diamond/config_diamond_2021_combined_alpha.json'
 
 %% Load user inputs from JSON file
@@ -150,7 +151,7 @@ for i = 1:number_of_stages
     
     if strcmp(phase, 'alpha')
         % print header for alpha phase texture measurements
-        fprintf(output_text_file, 'Test Number \t Texture Index \t ODF Max \t phi1 Angle of ODF Max \t PHI Angle of ODF Max \t phi2 Angle of ODF Max \t {0002} PF Max \t {10-10} PF Max \t {11-20} PF Max \t Basal TD Volume Fraction \t Basal RD Volume Fraction \n');
+        fprintf(output_text_file, 'Test Number \t Reconstruction RP Error \t Texture Index \t ODF Max \t phi1 Angle of ODF Max \t PHI Angle of ODF Max \t phi2 Angle of ODF Max \t {0002} PF Max \t {10-10} PF Max \t {11-20} PF Max \t Basal TD Volume Fraction \t Basal ND Volume Fraction \t Basal RD Volume Fraction \t Basal 45 Volume Fraction \n');
 
         % define alpha crystal symmetry
         CS = crystalSymmetry('6/mmm', [2.954 2.954 4.729], 'X||a*', 'Y||b', 'Z||c*', 'mineral', 'Titanium Alpha', 'color', 'light blue');
@@ -189,7 +190,7 @@ for i = 1:number_of_stages
                                                                                             
     elseif strcmp(phase, 'beta')
         % print header for beta phase texture measurements
-        fprintf(output_text_file, 'Test Number \t Texture Index \t ODF Max \t phi1 Angle of ODF Max \t PHI Angle of ODF Max \t phi2 Angle of ODF Max \t {001} PF Max \t {110} PF Max \t {111} PF Max \n');
+        fprintf(output_text_file, 'Test Number \t Reconstruction RP Error \t Texture Index \t ODF Max \t phi1 Angle of ODF Max \t PHI Angle of ODF Max \t phi2 Angle of ODF Max \t {001} PF Max \t {110} PF Max \t {111} PF Max \t Cube Volume Fraction \t Rotated Cube Volume Fraction \t Alpha Fibre Volume Fraction \t Gamma Fibre Volume Fraction \n');
 
         % define beta crystal symmetry
         CS = crystalSymmetry('m-3m', [3.192 3.192 3.192], 'mineral', 'Titanium Beta', 'color', 'light green');

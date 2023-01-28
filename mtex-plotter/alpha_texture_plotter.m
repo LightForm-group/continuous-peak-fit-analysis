@@ -314,6 +314,10 @@ returned_odf] = alpha_texture_plotter(user_inputs_filepath, inputDir, data_type,
 
         % Calculate the ODF
         odf = calcODF(pf, 'RESOLUTION', odf_resolution);
+        
+        % Calculate the RP error value
+        %RP_error(i) = calcError(pf, odf, 'RP')
+        RP_error(i) = 0
 
         if (euler1 >0) || (euler2 > 0) || (euler3 > 0)
             % Rotate the ODF
@@ -369,6 +373,10 @@ returned_odf] = alpha_texture_plotter(user_inputs_filepath, inputDir, data_type,
 
         % Calculate the ODF
         odf = calcODF(pf, 'RESOLUTION', odf_resolution);
+        
+        % Calculate the RP error value
+        %RP_error(i) = calcError(pf, odf, 'RP')
+        RP_error(i) = 0
 
         if (euler1 >0) || (euler2 > 0) || (euler3 > 0)
             % Rotate the ODF
@@ -415,7 +423,7 @@ returned_odf] = alpha_texture_plotter(user_inputs_filepath, inputDir, data_type,
         basal_45_volume_fraction(i) = volume(odf, basal_45,misorientation)*100
 
         % write the texture values to file
-        fprintf(output_text_file, '%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\n', test_number(i), TEXTURE_INDEX(i), odf_strength_max(i), rad2deg(phi1(i)), rad2deg(PHI(i)), rad2deg(phi2(i)), PF_basal_max(i), PF_prismatic1_max(i), PF_prismatic2_max(i), basal_TD_volume_fraction(i), basal_ND_volume_fraction(i), basal_RD_volume_fraction(i), basal_45_volume_fraction(i))
+        fprintf(output_text_file, '%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\n', test_number(i), TEXTURE_INDEX(i), odf_strength_max(i), rad2deg(phi1(i)), rad2deg(PHI(i)), rad2deg(phi2(i)), PF_basal_max(i), PF_prismatic1_max(i), PF_prismatic2_max(i), basal_TD_volume_fraction(i), basal_ND_volume_fraction(i), basal_RD_volume_fraction(i), basal_45_volume_fraction(i), RP_error(i))
         %fprintf(output_text_file, '%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\n', test_number(i), TEXTURE_INDEX(i), odf_strength_max(i), rad2deg(phi1(i)), rad2deg(PHI(i)), rad2deg(phi2(i)), PF_basal_max(i), PF_prismatic1_max(i), PF_prismatic2_max(i))
     
         % return ODF if requested
