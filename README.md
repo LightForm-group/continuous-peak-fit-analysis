@@ -20,7 +20,7 @@ Contents
     
 1. `Ti64_continuous_peak_fit_RUN.ipynb` A notebook for setting up and running Continuous-Peak-Fit to fit full lattice plane rings.
 
-2. `notebooks/NOTES_intensity_circles_to_polar_coordinates.ipynb` An interactive guide explaining how to calculate polar coordinates for plotting of intensity circles in 3D.
+2. `notebooks/NOTES_intensity_circles_to_polar_coordinates.ipynb` An interactive guide explaining how to calculate polar coordinates for plotting of intensity circles in 3D (as pole figures).
 
 3. `notebooks/Ti64_continuous_peak_fit_TEXTURE_ANALYSIS.ipynb` A notebook for anlaysing crystallographic texture from the Continuous-Peak-Fit output. Extracts lattice plane intensity distributions from the .fit files, to rewrite them in a spherical polar coordinate .txt format that can be analysed using MTEX.
 
@@ -74,7 +74,7 @@ pip list
 #tqdm
 ```
 **8. If all in step 7 are present, you can now run the example notebooks.
-Ensure the venv is active and use the following command to boot jupyter notebook (using all libraries installed in the venv)
+Ensure the venv is active and use the following command to boot jupyter notebook (using all libraries installed in the venv).
 Warning - using just `jupyter notebook` without `python -m` can result in using your default python environment (the libraries may not be recognised):**
 ```unix
 python -m jupyter notebook
