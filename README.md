@@ -28,6 +28,17 @@ Contents
 
 *Note, the `example-data/` and `example-analysis/` folders contain instuctions for downloading data that can be used as an example analysis, but a clear external file structure should be setup to support the analysis of large synchrotron datasets.*
 
+Development and Installation of continuous-peak-fit
+--------------------
+
+The Continuous-Peak-Fit package was developed by Simon Hunt (at The University of Manchester) and Danielle Fenech (at the University of Cambridge) and was funded by the Engineering and Physical Sciences Research Council (EPSRC).
+
+The latest version of Continuous-Peak-Fit can be installed using pip, with instructions [here](https://pypi.org/project/continuous-peak-fit/), or downloaded from a private repository on GitHub [here](https://github.com/ExperimentalMineralPhysics/Continuous-Peak-Fit). You may need to contact Simon Hunt at simon.hunt@manchester.ac.uk for permission to download the package from this private repository whilst it is in development.
+
+Clone the repository and save it in a separate folder called continuous-peak-fit, in the same directory as this continuous-peak-fit-analysis package. You will need to append this repository path to the system path, in order to import the Continuous-Peak-Fit pacakge within the notebook (which is explained in `Ti64_continuous_peak_fit_RUN.ipynb`). 
+
+Alternatively, if Continuous-Peak-Fit has been pip installed then you can just import Continuous-Peak-Fit as a standard package.
+
 Installation and Virtual Environment Setup
 -----------
 
