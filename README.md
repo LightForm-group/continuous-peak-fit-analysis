@@ -39,6 +39,8 @@ Clone the repository and save it in a separate folder called continuous-peak-fit
 
 Alternatively, if Continuous-Peak-Fit has been pip installed then you can just import Continuous-Peak-Fit as a standard package.
 
+For the reproducible analysis of SXRD data to support a paper in Materials Characterization, a working version of Continuous-Peak-Fit has been saved in compressed zip format in the continuous-peak-fit-analysis Python package v1.0.0, which can be unpacked and saved into a separate folder as described above.
+
 Installation and Virtual Environment Setup
 -----------
 
