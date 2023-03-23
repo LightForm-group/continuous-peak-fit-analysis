@@ -189,8 +189,8 @@ for i = 1:number_of_stages
         return;
     end
     
-    % save odf variable as file
-    %save(strcat(outputDir.(stage),'/', phase, '_ODF.mat'), 'odf');
+    save odf variable as file
+    save(strcat(outputDir.(stage),'/', phase, '_ODF.mat'), 'odf');
 end
 
 %% Plot the Texture Variation
