@@ -23,7 +23,6 @@ function [maxval] = pole_figure_plot(phase, ori, CS, contour_step, pf_max, outpu
     mtexColorbar ('location', 'southoutside', 'title', 'mrd'); % move colorbar to horizontal to avoid overlap
     set(gcf, 'PaperPositionMode', 'auto');
     saveas (PF, output_filename, 'png');
-    close(PF);
 
   elseif strcmp(phase, 'beta');
     PF = figure();
@@ -45,7 +44,6 @@ function [maxval] = pole_figure_plot(phase, ori, CS, contour_step, pf_max, outpu
     mtexColorbar ('location', 'southoutside', 'title', 'mrd'); % move colorbar to horizontal to avoid overlap
     set(gcf, 'PaperPositionMode', 'auto');
     saveas (PF, output_filename, 'png');
-    close(PF);
     
   else 
     disp ('Phase not recognised for plotting pole figures.');
