@@ -265,17 +265,17 @@ PF_001_max, PF_110_max, PF_111_max, returned_odf] = beta_texture_plotter(user_in
         misorientation = odf_misorientation*degree
 
         % separate a texture component and calculate the volume fraction
-        disp(['Calculating cube volume fraction for ', test_number_string]);
-        cube_volume_fraction(i) = volume(odf,cube,misorientation)*100
-        disp(['Calculating rotated cube volume fraction for ', test_number_string]);
-        rotated_cube_volume_fraction(i) = volume(odf,rotated_cube,misorientation)*100
-        disp(['Calculating alpha fibre volume fraction for ', test_number_string]);
-        alpha_fibre_volume_fraction(i) = volume(odf,alpha_fibre,misorientation)*100
-        disp(['Calculating gamma fibre volume fraction for ', test_number_string]);
-        gamma_fibre_volume_fraction(i) = volume(odf,gamma_fibre,misorientation)*100
+%         disp(['Calculating cube volume fraction for ', test_number_string]);
+%         cube_volume_fraction(i) = volume(odf,cube,misorientation)*100
+%         disp(['Calculating rotated cube volume fraction for ', test_number_string]);
+%         rotated_cube_volume_fraction(i) = volume(odf,rotated_cube,misorientation)*100
+%         disp(['Calculating alpha fibre volume fraction for ', test_number_string]);
+%         alpha_fibre_volume_fraction(i) = volume(odf,alpha_fibre,misorientation)*100
+%         disp(['Calculating gamma fibre volume fraction for ', test_number_string]);
+%         gamma_fibre_volume_fraction(i) = volume(odf,gamma_fibre,misorientation)*100
 
         % write the texture values to file
-        fprintf(output_text_file, '%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\n', test_number(i), TEXTURE_INDEX(i), odf_strength_max(i), rad2deg(phi1(i)), rad2deg(PHI(i)), rad2deg(phi2(i)), PF_001_max(i), PF_110_max(i), PF_111_max(i), cube_volume_fraction(i), rotated_cube_volume_fraction(i), alpha_fibre_volume_fraction(i), gamma_fibre_volume_fraction(i), RP_error(i))
+%         fprintf(output_text_file, '%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\n', test_number(i), TEXTURE_INDEX(i), odf_strength_max(i), rad2deg(phi1(i)), rad2deg(PHI(i)), rad2deg(phi2(i)), PF_001_max(i), PF_110_max(i), PF_111_max(i), cube_volume_fraction(i), rotated_cube_volume_fraction(i), alpha_fibre_volume_fraction(i), gamma_fibre_volume_fraction(i), RP_error(i))
         %fprintf(output_text_file, '%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\n', test_number(i), TEXTURE_INDEX(i), odf_strength_max(i), rad2deg(phi1(i)), rad2deg(PHI(i)), rad2deg(phi2(i)), PF_001_max(i), PF_110_max(i), PF_111_max(i))
         
         % return ODF if requested
