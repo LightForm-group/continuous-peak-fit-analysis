@@ -14,7 +14,7 @@
 % intensity data files, and then asked to select an output folder, to save
 % the ODFs, PFs and a text file containing the texture strength values.
 
-user_inputs_filepath = 'json/diamond/config_diamond_2021_summed_alpha.json'
+user_inputs_filepath = '/Users/user/Desktop/Diamond_2022/034_Ti64_TIFUN-T4_TD_Deform_910C_1mms-1/fourier-peak-analysis-texture/alpha/config_diamond_2022_alpha_034.json';
 
 %% Load user inputs from JSON file
 
