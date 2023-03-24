@@ -402,6 +402,18 @@ returned_odf] = alpha_texture_plotter(user_inputs_filepath, inputDir, data_type,
         phi1(i) = odf_ori_max(i).phi1
         PHI(i) = odf_ori_max(i).Phi
         phi2(i) = odf_ori_max(i).phi2
+        
+        % Change SS back for ODF export
+        % Specify Specimen Symmetry
+        SS = specimenSymmetry('triclinic'); % use for calculating pole figures
+        % create a Pole Figure variable containing the data
+        pf = PoleFigure.load(fname,h,CS,SS,'interface','generic',...
+          'ColumnNames', { 'Polar Angle' 'Azimuth Angle' 'Intensity'});
+        sz = [1 number_of_indices]
+        set_scale_params = ones(sz)
+        pf.c = num2cell(set_scale_params)
+        % Calculate the ODF
+        odf = calcODF(pf, 'RESOLUTION', odf_resolution);
 
         % define a texture component for the hexagonal phase
         basal_TD = symmetrise(orientation.byEuler(0*degree,90*degree,0*degree,CS),'unique') % define component with Euler angles
@@ -413,17 +425,17 @@ returned_odf] = alpha_texture_plotter(user_inputs_filepath, inputDir, data_type,
         misorientation = odf_misorientation*degree
 
         % separate a texture component and calculate the volume fraction
-        disp(['Calculating basal TD volume fraction for ', test_number_string]);
-        basal_TD_volume_fraction(i) = volume(odf, basal_TD,misorientation)*100
-        disp(['Calculating basal ND volume fraction for ', test_number_string]);
-        basal_ND_volume_fraction(i) = volume(odf, basal_ND,misorientation)*100
-        disp(['Calculating basal RD volume fraction for ', test_number_string]);
-        basal_RD_volume_fraction(i) = volume(odf, basal_RD,misorientation)*100
-        disp(['Calculating basal 45 volume fraction for ', test_number_string]);
-        basal_45_volume_fraction(i) = volume(odf, basal_45,misorientation)*100
+%         disp(['Calculating basal TD volume fraction for ', test_number_string]);
+%         basal_TD_volume_fraction(i) = volume(odf, basal_TD,misorientation)*100
+%         disp(['Calculating basal ND volume fraction for ', test_number_string]);
+%         basal_ND_volume_fraction(i) = volume(odf, basal_ND,misorientation)*100
+%         disp(['Calculating basal RD volume fraction for ', test_number_string]);
+%         basal_RD_volume_fraction(i) = volume(odf, basal_RD,misorientation)*100
+%         disp(['Calculating basal 45 volume fraction for ', test_number_string]);
+%         basal_45_volume_fraction(i) = volume(odf, basal_45,misorientation)*100
 
         % write the texture values to file
-        fprintf(output_text_file, '%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\n', test_number(i), TEXTURE_INDEX(i), odf_strength_max(i), rad2deg(phi1(i)), rad2deg(PHI(i)), rad2deg(phi2(i)), PF_basal_max(i), PF_prismatic1_max(i), PF_prismatic2_max(i), basal_TD_volume_fraction(i), basal_ND_volume_fraction(i), basal_RD_volume_fraction(i), basal_45_volume_fraction(i), RP_error(i))
+%         fprintf(output_text_file, '%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\n', test_number(i), TEXTURE_INDEX(i), odf_strength_max(i), rad2deg(phi1(i)), rad2deg(PHI(i)), rad2deg(phi2(i)), PF_basal_max(i), PF_prismatic1_max(i), PF_prismatic2_max(i), basal_TD_volume_fraction(i), basal_ND_volume_fraction(i), basal_RD_volume_fraction(i), basal_45_volume_fraction(i), RP_error(i))
         %fprintf(output_text_file, '%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\n', test_number(i), TEXTURE_INDEX(i), odf_strength_max(i), rad2deg(phi1(i)), rad2deg(PHI(i)), rad2deg(phi2(i)), PF_basal_max(i), PF_prismatic1_max(i), PF_prismatic2_max(i))
     
         % return ODF if requested
