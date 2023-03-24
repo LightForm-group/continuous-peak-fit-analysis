@@ -137,7 +137,7 @@ end
 
 %% Analyse Intensity Data
 
-odf_return = 'no'
+odf_return = 'yes';
 
 for i = 1:number_of_stages
     
@@ -183,7 +183,7 @@ for i = 1:number_of_stages
     end
     
     % save odf variable as file
-    %save(strcat(outputDir.(stage),'/', phase, '_ODF.mat'), 'odf');
+    save(strcat(outputDir.(stage),'/', 'ODF.mat'), 'odf');
 end
 
 %% Plot the Texture Variation
