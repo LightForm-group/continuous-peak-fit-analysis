@@ -14,14 +14,7 @@
 % intensity data files, and then asked to select an output folder, to save
 % the ODFs, PFs and a text file containing the texture strength values.
 
-%user_inputs_filepath = 'json/diamond/config_diamond_2022_additional_stage_scan_beta.json'
-%user_inputs_filepath = 'json/diamond/config_diamond_2022_beta_027.json'
 user_inputs_filepath = 'json/diamond/config_diamond_2021_summed_alpha.json'
-%user_inputs_filepath = 'json/diamond/config_diamond_2017_beta.json'
-%user_inputs_filepath = 'json/desy/config_desy_2020_alpha_09b_volume_fraction.json'
-
-% defining ODF for modelling
-%user_inputs_filepath = 'json/diamond/config_diamond_2022_alpha_034.json'
 
 %% Load user inputs from JSON file
 
